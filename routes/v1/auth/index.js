@@ -45,7 +45,7 @@ function *login() {
  *      200:
  *        description: User logged out
  */
-function *logout(){
+function *logout() {
   this.body =
   { success: true
   }

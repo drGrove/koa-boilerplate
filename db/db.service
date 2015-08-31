@@ -1,0 +1,16 @@
+[Unit]
+Description=D.R. Grove Software LLC MySQL Server
+Author=Daniel Grove - danny@drgrovellc.com
+Requires=docker.service
+
+[Service]
+User=core
+ExecStartPre=-/usr/bin/docker pull drgrovellc/db
+ExecStart=/usr/bin/docker run -t \
+--env-file $PWD/db.env \
+-v $PWD/data:/var/lib/mysql \
+-p 3306:3306 \
+drgrovellc/db
+
+[Install]
+WantedBy=multi-user.target

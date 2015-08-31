@@ -6,9 +6,10 @@ var routes = function(){
   var fs = require('fs')
   var swaggerJSDoc = require('swagger-jsdoc')
   var config = require('../../lib/config')
+  var ensureAuth = require('../../lib/ensureAuth')
   var DIR = __dirname.split('/')[__dirname.split('/').length - 1]
 
-  r.get('/', function*(next){
+  r.get('/', ensureAuth, function*(next){
     return this.body =
     { active: true
     , timestamp: new Date().getTime()

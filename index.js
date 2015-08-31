@@ -1,18 +1,19 @@
 'use strict'
 
-var koa = require('koa'),
-    mount = require('koa-mount'),
-    swagger = require('swagger-koa'),
-    bodyParser = require('koa-bodyparser'),
-    morgan = require('koa-morgan'),
-    responseTime = require('koa-response-time'),
-    error = require('koa-error'),
-    cors = require('koa-cors'),
-    mount = require('koa-mount'),
-    staticNow = require('static-now'),
-    config = require('./lib/config'),
-    routes = require('./routes/index'),
-    app = koa()
+var koa = require('koa')
+var mount = require('koa-mount')
+var swagger = require('swagger-koa')
+var bodyParser = require('koa-bodyparser')
+var morgan = require('koa-morgan')
+var responseTime = require('koa-response-time')
+var error = require('koa-error')
+var cors = require('koa-cors')
+var mount = require('koa-mount')
+var staticNow = require('static-now')
+var config = require('./lib/config')
+var genErr = require('./lib/error')
+var routes = require('./routes/index')
+var app = koa()
 
 // X-Response-Time
 app.use(responseTime())
@@ -23,17 +24,17 @@ app.use(morgan.middleware('combined'))
 // CORS
 app.use(cors())
 
+// Body Parser
+app.use(bodyParser())
+
 // 401 Handler
-app.use(function*(next){
+app.use(function*(next) {
   try {
     yield next
-  } catch(err) {
-    if(401 === err.status) {
+  } catch (err) {
+    if (401 === err.status) {
       this.status = 401
-      this.body =
-      { error: true
-      , msg: 'Authorization Required. Please use Authorization header to get access.'
-      }
+      this.body = genErr('NO_AUTH')
     } else {
       yield next
     }
@@ -50,6 +51,21 @@ var bowerStatic = staticNow({
   autostart: false
 })
 
+// Error Handler
+app.use(error())
+
+// 404 Handler
+app.use(function*(next) {
+  yield next;
+  var status = this.status || 404;
+  if (status === 404) {
+    return this.body =
+    { error: true
+    , msg: 'Item not found'
+    }
+  }
+})
+
 // Swagger
 app.use(mount('/swagger', swaggerStatic))
 app.use(mount('/bower_components', bowerStatic))
@@ -57,10 +73,7 @@ app.use(mount('/bower_components', bowerStatic))
 // Router
 app.use(mount('/api', routes(app).routes()))
 
-// Error Handler
-app.use(error())
 
-
-app.listen(config.app.port, config.app.host, function(){
+app.listen(config.app.port, config.app.host, function() {
   console.log('Listening on http://%s:%s', config.app.host, config.app.port)
 })

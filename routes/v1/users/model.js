@@ -1,6 +1,6 @@
 'use strict';
-var db = require('../../../libs/db').sequelize,
-    Sequelize = require('../../../libs/db').Sequelize,
+var db = require(__dirname + '/../../../lib/db').sequelize,
+    Sequelize = require(__dirname + '/../../../lib/db').Sequelize,
     bcrypt = require('bcryptjs')
 
 /**
@@ -12,6 +12,10 @@ var db = require('../../../libs/db').sequelize,
  *       - id
  *       - username
  *       - password
+ *       - email
+ *       - firstname
+ *       - lastname
+ *       - phone
  *     properties:
  *       id:
  *         type: integer
@@ -63,9 +67,12 @@ var schema =
 , email:
   { type: Sequelize.STRING
   , unique: true
+  , allowNull: false
   }
 , username:
   { type: Sequelize.STRING
+  , unique: true
+  , allowNull: false
   }
 , password:
   { type: Sequelize.STRING
@@ -147,7 +154,7 @@ var stripPassword = function(models, options, done) {
 
 var User = db
 .define
-( 'Member'
+( 'User'
 , schema
 , { instanceMethods:
     { generateHash: function(password, done) {
@@ -178,7 +185,7 @@ var User = db
 User.beforeCreate(hashPassword)
 User.beforeUpdate(hashPassword)
 
-Member.sync().then(function(){
+User.sync().then(function(){
   console.log('User table synced')
 })
 

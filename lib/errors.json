@@ -1,0 +1,12 @@
+{ "NO_AUTH":
+  { "msg": "Bearer Token Required. Please login."
+  , "refUrl": "/api/v1/auth/login"
+  , "errCode": "NO_AUTH"
+  , "errNo": "401"
+  }
+, "INSUFFICENT_PERMISSIONS":
+  { "msg": "This route requires specific permissions."
+  , "errCode": "INSUFFICENT_PERMISSIONS"
+  , "errNo": "403"
+  }
+}

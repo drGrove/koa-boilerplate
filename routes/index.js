@@ -7,7 +7,7 @@ var routes = function(app) {
   var path = require('path')
   var fs = require('fs')
 
-  r.get('/', function*(next){
+  r.get('/', function*(next) {
     return this.body = {
       active: true,
       timestamp: new Date().getTime()

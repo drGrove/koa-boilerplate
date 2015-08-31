@@ -1,4 +1,5 @@
 'use strict'
+var User = require(__dirname + '/model')
 
 var config =
 { "GET":
@@ -37,12 +38,26 @@ module.exports = config;
  *            $ref: '#/definitions/User'
  */
 function *all() {
-  this.body = [
-    { username: 'dgrove'
-    },
-    { username: 'jsmith'
+  try {
+    var users = JSON.parse(
+        JSON.stringify(
+          yield User.findAll({})
+        )
+      )
+    for (var i = 0; i < users.length; i++) {
+      delete users[i].password;
     }
-  ]
+    this.status = 201
+    return this.body = users
+  } catch (e) {
+    console.error('Error: ', e.stack || e)
+    this.status = 500
+    return this.body =
+    { error: true
+    , msg: 'Error returning users'
+    , develeoperMsg: e.message
+    }
+  }
 }
 /**
  * @swagger
@@ -67,10 +82,33 @@ function *all() {
  *           $ref: '#/definitions/User'
  */
 function *create() {
-  this.body = [
-    { username: 'jsmith'
+  var body = this.request.body
+  body.level = 1;
+  try {
+    var res = yield User.create(body);
+    console.log('Res: ', res)
+    this.status = 201
+    delete res.password
+    return this.body = res;
+  } catch (e) {
+      this.status = 400;
+      return this.body =
+      { error: true
+      , msg: e.errors || 'Invalid Input'
+      }
+    /*
+    } else {
+      console.error('Error: ', e)
+      this.status = 400;
+      return this.body =
+      { error: true
+      , msg: 'Error creating user'
+      , develeoperMsg: e.message
+      }
     }
-  ]
+    */
+  }
+  this.body = body
 }
 
 
@@ -96,9 +134,30 @@ function *create() {
  *           $ref: '#/definitions/User'
  */
 function *byId() {
-  this.body =
-  { username: 'jsmith'
-  }
+  console.log('ID: ', this.params.id)
+  try {
+    var user = JSON.parse(
+        JSON.stringify(
+          yield User.findById(
+            this.params.id
+          ) 
+        )  
+      )
+    delete user.password
+    this.body = user
+  } catch (e) {
+    switch(e.name) {
+      case "TypeError":
+        this.status = 404;
+        break;
+      default:
+        this.status = 500
+        this.body = 
+        { error: true
+        , msg: e.message
+        }
+    }
+  } 
 }
 
 /**
