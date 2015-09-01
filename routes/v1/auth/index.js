@@ -1,10 +1,40 @@
 'use strict'
-var config =
+
+var User = require(__dirname + '/../users/model')
+var config = require(__dirname + '/../../../lib/config')
+var jwt = require('jsonwebtoken')
+
+var routeConfig =
 { "POST":
   { "/login": login
   , "/logout": logout
   }
 }
+
+/**
+ * @name createJWT
+ * @function
+ * @param {Object} user - The current user
+ * @returns {Object} jwt - Signed JWT Token
+ */
+function createJWT(user) {
+  var now = Date.now()
+  // Expire in 14 days
+  var expires = now + (1000 * 60 * 60 * 24 * 14)
+  var mins = (expires - now) / 1000 / 60
+  var payload =
+  { sub: user.id
+  , iat: now
+  , exp: expires
+  }
+  return jwt
+    .sign
+    ( payload
+    , config.token_secret
+    , mins
+    )
+}
+
 
 /**
  * @swagger
@@ -24,11 +54,28 @@ var config =
  *           $ref: '#/definitions/Login'
  */
 function *login() {
-  this.body = [
-    { username: 'dgrove'
-    , jwt: 'dkaflkjakldjfd;lkajfd;klajf'
+  var body = this.request.body
+  try {
+    let user = yield User
+      .findOne
+      ( { email: body.email
+        }
+      )
+    var isMatch = user.validPassword(body.password)
+    if(isMatch) {
+      return this.body = 
+      { token: createJWT(user)
+      }
+    } else {
+      throw new Error('Invalid email/password combination')
     }
-  ]
+  } catch (e) {
+    this.status = 400
+    this.body =
+    { error: true
+    , msg: e.message
+    }
+  }
 }
 
 /**
@@ -65,4 +112,4 @@ function *logout() {
  *         type: string
  */
 
-module.exports = config;
+module.exports = routeConfig;

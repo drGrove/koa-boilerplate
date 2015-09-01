@@ -1,12 +1,9 @@
-'use strict'
-
 var routes = function(){
   var r = require('koa-router')()
   var path = require('path')
   var fs = require('fs')
   var swaggerJSDoc = require('swagger-jsdoc')
   var config = require('../../lib/config')
-  var ensureAuth = require('../../lib/ensureAuth')
   var DIR = __dirname.split('/')[__dirname.split('/').length - 1]
 
   r.get('/', function*(next){
@@ -26,13 +23,18 @@ var routes = function(){
 
   directories.forEach(function(dir){
     var paths = require('./' + dir)
-    for(var method in paths) {
-      for(var path in paths[method]) {
+    for (var method in paths) {
+      for (var path in paths[method]) {
         var callback = paths[method][path]
         var dirPath = __dirname
         var version = dirPath.split('/').pop()
         var uri = '/' + dir + path
-        r[method.toLowerCase()](uri, callback)
+        if (Array.isArray(callback)) {
+          callback.unshift(uri)
+          r[method.toLowerCase()].apply(r, callback)
+        } else {
+          r[method.toLowerCase()](uri, callback)
+        }
       }
     }
   })

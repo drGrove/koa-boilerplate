@@ -1,23 +1,38 @@
 'use strict'
 var User = require(__dirname + '/model')
+var ensureAuth = require(__dirname + '/../../../lib/ensureAuth')
 
-var config =
+var routeConfig =
 { "GET":
-  { "/": all
-  , "/:id": byId
+  { "/":
+    [ all
+    ]
+  , "/:id":
+    [ ensureAuth
+    , byId
+    ]
   }
 , "POST":
-  { "/": create
+  { "/":
+    [ ensureAuth
+    , create
+    ]
   }
 , "PUT":
-  { "/:id": update
+  { "/:id":
+    [ ensureAuth
+    , update
+    ]
   }
 , "DELETE":
-  { "/:id": remove
+  { "/:id":
+    [ ensureAuth
+    , remove
+    ]
   }
 }
 
-module.exports = config;
+module.exports = routeConfig;
 
 /**
  * @swagger

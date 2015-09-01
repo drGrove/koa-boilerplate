@@ -9,4 +9,10 @@
   , "errCode": "INSUFFICENT_PERMISSIONS"
   , "errNo": "403"
   }
+, "TOKEN_EXPIRED":
+  { "msg": "User token has expired. Please log back in."
+  , "refUrl": "/api/v1/auth/login"
+  , "errCode": "TOKEN_EXPIRED"
+  , "errNo": 410
+  }
 }
