@@ -140,8 +140,8 @@ function *byId() {
         JSON.stringify(
           yield User.findById(
             this.params.id
-          ) 
-        )  
+          )
+        )
       )
     delete user.password
     this.body = user
@@ -152,12 +152,12 @@ function *byId() {
         break;
       default:
         this.status = 500
-        this.body = 
+        this.body =
         { error: true
         , msg: e.message
         }
     }
-  } 
+  }
 }
 
 /**
@@ -179,7 +179,19 @@ function *byId() {
  *         description: Delete user by id
  */
 function *remove() {
-  this.status = 204
+  try {
+    var user = yield User.findById(this.params.id)
+    user.isActive = false
+    yield user.save()
+    yield user.destroy()
+    return this.status = 204
+  } catch (e) {
+    this.status = 500
+    this.body =
+    { error: true
+    , msg: e.errors || e.message
+    }
+  }
 }
 
 /**
@@ -203,8 +215,33 @@ function *remove() {
  *           $ref: '#/definitions/User'
  */
 function *update() {
-  this.status = 200
-  this.body =
-  { username: 'jsmith'
+  var body = this.request.body
+  try {
+    var user = yield User.findById(this.params.id)
+    if(!user) {
+      var user = yield User.find({
+        where: {id: this.params.id},
+        paranoid: false
+      })
+    }
+    for(let key in body) {
+      if(body.hasOwnProperty(key) && key !== "id") {
+        user[key] = body[key]
+      }
+    }
+    if(user.deletedAt && user.isActive) {
+      yield user.restore()
+    }
+    yield user.save()
+    user = JSON.parse(JSON.stringify(user))
+    delete user.password
+    return this.body = user
+  } catch (e) {
+    console.error('Error: ', e.stack)
+    this.status = 500
+    this.body =
+    { error: true
+    , msg: e.errors || e.message
+    }
   }
 }

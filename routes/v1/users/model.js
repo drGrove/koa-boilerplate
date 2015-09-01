@@ -171,14 +171,12 @@ var User = db
     , validPassword: function(password, next) {
         return bcrypt.compareSync(password, this.password)
       }
-    }
-  }
-, { instanceMethods:
-    { toJSON: function() {
+    , toJSON: function() {
         this.dataValues.password = null
         return this.dataValues
       }
     }
+  , paranoid: true
   }
 )
 

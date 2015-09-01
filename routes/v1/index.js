@@ -9,7 +9,7 @@ var routes = function(){
   var ensureAuth = require('../../lib/ensureAuth')
   var DIR = __dirname.split('/')[__dirname.split('/').length - 1]
 
-  r.get('/', ensureAuth, function*(next){
+  r.get('/', function*(next){
     return this.body =
     { active: true
     , timestamp: new Date().getTime()
