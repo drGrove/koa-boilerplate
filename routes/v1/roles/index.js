@@ -1,5 +1,5 @@
 'use strict'
-var User = require(__dirname + '/model')
+var Roles = require(__dirname + '/model')
 var ensureAuth = require(__dirname + '/../../../lib/ensureAuth')
 
 var routeConfig =
@@ -36,71 +36,68 @@ module.exports = routeConfig;
 
 /**
  * @swagger
- * /v1/users:
+ * /v1/roles:
  *  get:
- *    operationId: listUsersV1
- *    summary: List Users
+ *    operationId: listRolesV1
+ *    summary: List Roles
  *    produces:
  *     - application/json
  *    tags:
- *     - Users
+ *     - Roles
  *    responses:
  *      200:
- *        description: Users get all
+ *        description: Roles get all
  *        schema:
  *          type: array
  *          items:
- *            $ref: '#/definitions/User'
+ *            $ref: '#/definitions/Role'
  */
 function *all() {
   try {
-    var users = JSON.parse(
+    var roles = JSON.parse(
         JSON.stringify(
-          yield User.findAll({})
+          yield Roles.findAll({})
         )
       )
-    for (var i = 0; i < users.length; i++) {
-      delete users[i].password;
-    }
-    this.status = 201
-    return this.body = users
+    this.status = 200
+    return this.body = roles
   } catch (e) {
     console.error('Error: ', e.stack || e)
     this.status = 500
     return this.body =
     { error: true
-    , msg: 'Error returning users'
+    , msg: 'Error returning roles'
     , develeoperMsg: e.message
     }
   }
 }
 /**
  * @swagger
- * /v1/users:
+ * /v1/roles:
  *   post:
- *     operationId: createUsersV1
- *     summary: Creates a new User.
+ *     operationId: createRolessV1
+ *     summary: Creates a new Roles.
  *     produces:
  *      - application/json
  *     tags:
- *      - Users
+ *      - Roless
  *     parameters:
- *       - name: User
+ *       - name: Roles
  *         in: body
  *         required: true
  *         schema:
- *           $ref: '#/definitions/User'
+ *           $ref: '#/definitions/Roles'
  *     responses:
  *       200:
- *         description: Creates a user
+ *         description: Creates a role
  *         schema:
- *           $ref: '#/definitions/User'
+ *           $ref: '#/definitions/Roles'
  */
 function *create() {
   var body = this.request.body
   body.level = 1;
   try {
-    var res = yield User.create(body);
+    var res = yield Roles.create(body);
     console.log('Res: ', res)
     this.status = 201
     delete res.password
@@ -117,7 +114,7 @@ function *create() {
       this.status = 400;
       return this.body =
       { error: true
-      , msg: 'Error creating user'
+      , msg: 'Error creating role'
       , develeoperMsg: e.message
       }
     }
@@ -129,37 +126,36 @@ function *create() {
 
 /**
  * @swagger
- * /v1/users/{id}:
+ * /v1/roles/{id}:
  *   get:
- *     operationId: listUserByIdV1
- *     summary: List User by id
+ *     operationId: listRolesByIdV1
+ *     summary: List Roles by id
  *     parameters:
  *       - name: id
  *         in: path
- *         description: ID of user to fetch
+ *         description: ID of role to fetch
  *         required: true
  *         type: integer
  *         format: int64
  *     tags:
- *      - Users
+ *      - Roless
  *     responses:
  *       200:
- *         description: Users by ID
+ *         description: Roless by ID
  *         schema:
- *           $ref: '#/definitions/User'
+ *           $ref: '#/definitions/Roles'
  */
 function *byId() {
   console.log('ID: ', this.params.id)
   try {
-    var user = JSON.parse(
+    var role = JSON.parse(
         JSON.stringify(
-          yield User.findById(
+          yield Roles.findById(
             this.params.id
           )
         )
       )
-    delete user.password
-    this.body = user
+    this.body = role
   } catch (e) {
     switch(e.name) {
       case "TypeError":
@@ -177,28 +173,28 @@ function *byId() {
 
 /**
  * @swagger
- * /v1/users/{id}:
+ * /v1/roles/{id}:
  *   delete:
- *     operationId: deleteUserV1
- *     summary: Remove User by id
+ *     operationId: deleteRolesV1
+ *     summary: Remove Roles by id
  *     parameters:
  *       - name: id
  *         in: path
- *         description: ID of user to delete
+ *         description: ID of role to delete
  *         type: integer
  *         format: int64
  *     tags:
- *       - Users
+ *       - Roless
  *     responses:
  *       204:
- *         description: Delete user by id
+ *         description: Delete role by id
  */
 function *remove() {
   try {
-    var user = yield User.findById(this.params.id)
-    user.isActive = false
-    yield user.save()
-    yield user.destroy()
+    var role = yield Roles.findById(this.params.id)
+    role.isActive = false
+    yield role.save()
+    yield role.destroy()
     return this.status = 204
   } catch (e) {
     this.status = 500
@@ -211,46 +207,44 @@ function *remove() {
 
 /**
  * @swagger
- * /v1/users/{id}:
+ * /v1/roles/{id}:
  *   put:
- *     operationId: updateUserV1
- *     summary: Update user by id
+ *     operationId: updateRolesV1
+ *     summary: Update role by id
  *     parameters:
  *       - name: id
  *         in: path
- *         description: ID of user to update
+ *         description: ID of role to update
  *         type: integer
  *         format: int64
  *     tags:
- *       - Users
+ *       - Roless
  *     responses:
  *       200:
- *         description: Update user by id
+ *         description: Update role by id
  *         schema:
- *           $ref: '#/definitions/User'
+ *           $ref: '#/definitions/Roles'
  */
 function *update() {
   var body = this.request.body
   try {
-    var user = yield User.findById(this.params.id)
-    if(!user) {
-      var user = yield User.find({
+    var role = yield Roles.findById(this.params.id)
+    if(!role) {
+      var role = yield Roles.find({
         where: {id: this.params.id},
         paranoid: false
       })
     }
     for(let key in body) {
       if(body.hasOwnProperty(key) && key !== "id") {
-        user[key] = body[key]
+        role[key] = body[key]
       }
     }
-    if(user.deletedAt && user.isActive) {
-      yield user.restore()
+    if(role.deletedAt && role.isActive) {
+      yield role.restore()
     }
-    yield user.save()
-    user = JSON.parse(JSON.stringify(user))
-    delete user.password
-    return this.body = user
+    yield role.save()
+    return this.body = role
   } catch (e) {
     console.error('Error: ', e.stack)
     this.status = 500

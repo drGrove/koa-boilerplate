@@ -1,5 +1,9 @@
 'use strict'
-var config =
+var Route = require(__dirname + '/model')
+var genError = require(__dirname + '/../../../lib/error')
+var ensureAuth = require(__dirname + '/../../../lib/ensureAuth')
+var Role = require(__dirname + '/../roles/model')
+var routeConfig =
 { "POST":
   { "/": create
   }
@@ -8,31 +12,19 @@ var config =
   , "/:id": byId
   }
 , "PUT":
-  { "/:id": update
+  { "/:id":
+    [ ensureAuth
+    , update
+    ]
   }
 , "DELETE":
-  { "/:id": remove
+  { "/:id":
+    [ ensureAuth
+    , remove
+    ]
+
   }
 }
-
-/**
- * @swagger
- * definition:
- *  route:
- *    required: 
- *      - url
- *    properties:
- *      id:
- *        type: long 
- *      url:
- *        type: string
- *  newRoute:
- *    required:
- *      - url
- *    properties:
- *      url:
- *        type: string
- */
 
 /**
  * @swagger
@@ -54,17 +46,21 @@ var config =
 function *create() {
   var body = this.request.body
   try {
-    var res = yield Route.create(body)
-    this.status = 201
-    return this.body = res
-  } catch (e) {
-    console.error('Error: ', e.stack || e)
-    this.status = 400
-    return this.body =
-    { error: true
-    , msg: 'Error creating route'
-    , develeoperMsg: e.message
+    let routeBody =  
+    { url: body.url
+    , method: body.method 
     }
+    delete body.url
+    delete body.method
+    var route = yield Route.create(routeBody)
+    var role = yield Role.findById(body.role)
+    yield role.addRoute(route)
+    this.status = 201
+    return this.body = route
+  } catch (e) {
+    console.error('Error: ', e)
+    this.status = 400
+    return this.body = genError("NOT_FOUND")
   }
 }
 
@@ -87,29 +83,78 @@ function *create() {
  *            $ref: '#/definitions/route'
  */
 function *all() {
-
+  try {
+    var res = yield Route.findAll({})
+    this.body = res
+  } catch (e) {
+    this.status = 500
+    this.body =
+    { error: true
+    , msg: e.errors || e.message
+    }
+  }
 }
 
 /**
  *
  */
 function *byId() {
-
+  var id = this.params.id
+  try {
+    this.body = yield Route.findById(id)
+  } catch (e) {
+    this.status = 404;
+    this.body =
+    { error: true
+    , msg:  "Item not found"
+    }
+  }
 }
 
 /**
  *
  */
 function *update() {
-
+  var id = this.params.id
+  var body = this.request.body
+  try {
+    var route = yield Route.findById(id)
+    for(var key in body) {
+      if(route.hasOwnProperty(key)) {
+        route[key] = body[key]
+      }
+    }
+    yield route.save()
+    return this.body = route
+  } catch (e) {
+    this.status = 400;
+    return this.body =
+    { error: true
+    , msg: e.errors || e.message
+    , errNo: 400
+    , errCode: "INVALID_PARAMETERS"
+    }
+  }
 }
 
 /**
  *
  */
 function *remove() {
-
+  var id = this.params.id
+  try {
+    var route = yield Route.findById(id)
+    yield route.destroy()
+    this.status = 204
+    return this.body = genError("NO_CONTENT")
+  } catch (e) {
+    this.status = 500;
+    return this.body =
+    { error: true
+    , msg: e.errors || e.message
+    }
+  }
 }
 
 
-module.exports = config
+module.exports = routeConfig

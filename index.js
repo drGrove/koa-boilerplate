@@ -12,6 +12,7 @@ var mount = require('koa-mount')
 var staticNow = require('static-now')
 var config = require('./lib/config')
 var genErr = require('./lib/error')
+var sequelize = require('./lib/db').sequelize
 var routes = require('./routes/index')
 var app = koa()
 
@@ -69,6 +70,11 @@ app.use(function*(next) {
 // Swagger
 app.use(mount('/swagger', swaggerStatic))
 app.use(mount('/bower_components', bowerStatic))
+
+// Sequelize Transactions
+app.use(require('koa-sequelize-transaction')({
+  sequelize: sequelize
+}))
 
 // Router
 app.use(mount('/api', routes(app).routes()))

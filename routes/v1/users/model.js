@@ -1,7 +1,7 @@
 'use strict';
-var db = require(__dirname + '/../../../lib/db').sequelize,
-    Sequelize = require(__dirname + '/../../../lib/db').Sequelize,
-    bcrypt = require('bcryptjs')
+var db = require(__dirname + '/../../../lib/db').sequelize
+var Sequelize = require(__dirname + '/../../../lib/db').Sequelize
+var bcrypt = require('bcryptjs')
 
 /**
  * @swagger

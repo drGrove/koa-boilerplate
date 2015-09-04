@@ -7,7 +7,9 @@ var jwt = require('jsonwebtoken')
 var routeConfig =
 { "POST":
   { "/login": login
-  , "/logout": logout
+  }
+, "GET":
+  { "/logout": logout
   }
 }
 
@@ -42,8 +44,17 @@ function createJWT(user) {
  *   post:
  *     operationId: loginUserV1
  *     summary: Login User
+ *     accepts:
+ *      - application/json
  *     produces:
  *      - application/json
+ *     parameters:
+ *      - name: login
+ *        in: body
+ *        required: true
+ *        description: Login user parameters
+ *        schema:
+ *          $ref: '#/definitions/Login'
  *     tags:
  *      - Auth
  *     responses:
@@ -51,7 +62,7 @@ function createJWT(user) {
  *         description: User logged in
  *         schema:
  *           type: object
- *           $ref: '#/definitions/Login'
+ *           $ref: '#/definitions/LoginResponse'
  */
 function *login() {
   var body = this.request.body
@@ -63,7 +74,7 @@ function *login() {
       )
     var isMatch = user.validPassword(body.password)
     if(isMatch) {
-      return this.body = 
+      return this.body =
       { token: createJWT(user)
       }
     } else {
@@ -81,7 +92,7 @@ function *login() {
 /**
  * @swagger
  * /v1/auth/logout:
- *  post:
+ *  get:
  *    operationId: logoutUserV1
  *    summary: Logout Current User
  *    produces:
@@ -106,9 +117,15 @@ function *logout() {
  *       - username
  *       - password
  *     properties:
- *       username:
+ *       email:
  *         type: string
+ *         description: Email address for user
  *       password:
+ *         type: string
+ *         description: Password for user
+ *   LoginResponse:
+ *     properties:
+ *       jwt:
  *         type: string
  */
 
