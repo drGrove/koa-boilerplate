@@ -75,12 +75,12 @@ function *all() {
  * @swagger
  * /v1/roles:
  *   post:
- *     operationId: createRolessV1
+ *     operationId: createRolesV1
  *     summary: Creates a new Roles.
  *     produces:
  *      - application/json
  *     tags:
- *      - Roless
+ *      - Roles
  *     parameters:
  *       - name: Roles
  *         in: body
@@ -138,10 +138,10 @@ function *create() {
  *         type: integer
  *         format: int64
  *     tags:
- *      - Roless
+ *      - Roles
  *     responses:
  *       200:
- *         description: Roless by ID
+ *         description: Roles by ID
  *         schema:
  *           $ref: '#/definitions/Roles'
  */
@@ -184,7 +184,7 @@ function *byId() {
  *         type: integer
  *         format: int64
  *     tags:
- *       - Roless
+ *       - Roles
  *     responses:
  *       204:
  *         description: Delete role by id
@@ -218,7 +218,7 @@ function *remove() {
  *         type: integer
  *         format: int64
  *     tags:
- *       - Roless
+ *       - Roles
  *     responses:
  *       200:
  *         description: Update role by id
