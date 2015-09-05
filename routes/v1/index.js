@@ -1,9 +1,9 @@
-var routes = function(){
+var routes = function(app){
   var r = require('koa-router')()
   var path = require('path')
   var fs = require('fs')
   var swaggerJSDoc = require('swagger-jsdoc')
-  var config = require('../../lib/config')
+  var config = require(app.rootDir + '/lib/config')
   var DIR = __dirname.split('/')[__dirname.split('/').length - 1]
 
   r.get('/', function*(next){
@@ -22,7 +22,7 @@ var routes = function(){
   var directories = getDirectories(__dirname)
 
   directories.forEach(function(dir){
-    var paths = require('./' + dir)
+    var paths = require('./' + dir)(app)
     for (var method in paths) {
       for (var path in paths[method]) {
         var callback = paths[method][path]
@@ -42,7 +42,7 @@ var routes = function(){
     return (/(^|\/)\.[^\/\.]/g).test(path);
   }
 
-  var walk = function(dir, parent) {
+  var walk = function(dir, parent, exclusions) {
     var results = []
     if(parent) {
       dir = parent + '/' + dir
@@ -56,12 +56,18 @@ var routes = function(){
         if(isUnixHiddenPath(file)) {
           throw new Error('hidden file')
         }
+        if(excludedFileTypes.indexOf(file.split('.')[file.split.length - 1]) === -1) {
+          throw new Error('unsupported type')
+        }
       } catch(e) {
+        con = false
+      }
+      if(exclusions.indexOf(dir) !== -1) {
         con = false
       }
       if(con) {
         if(f.isDirectory()) {
-          results = results.concat(walk(file, dir))
+          results = results.concat(walk(file, dir, exclusions))
         } else {
           results.push(dir + '/' + file)
         }
@@ -70,7 +76,12 @@ var routes = function(){
     return results
   }
 
-  var specs = walk(__dirname);
+  var specs = walk
+    ( app.rootDir
+    , null
+    , [ app.rootDir + '/db'
+      ]
+    );
 
   var swaggerOptions = {
     swaggerDefinition: {

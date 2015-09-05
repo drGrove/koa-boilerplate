@@ -13,7 +13,7 @@ var routes = function(app) {
       timestamp: new Date().getTime()
     }
   })
-  r.use('/v1', v1().routes())
+  r.use('/v1', v1(app).routes())
   return r
 }
 

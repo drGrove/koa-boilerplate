@@ -16,6 +16,8 @@ var sequelize = require('./lib/db').sequelize
 var routes = require('./routes/index')
 var app = koa()
 
+app.rootDir = __dirname
+
 // X-Response-Time
 app.use(responseTime())
 
