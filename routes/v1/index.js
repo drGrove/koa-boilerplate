@@ -38,6 +38,10 @@ var routes = function(app){
       }
     }
   })
+
+  /**
+   *
+   */
   var isUnixHiddenPath = function(path) {
     return (/(^|\/)\.[^\/\.]/g).test(path);
   }
@@ -47,6 +51,13 @@ var routes = function(app){
     if(parent) {
       dir = parent + '/' + dir
     }
+
+    var excludedFileTypes =
+    [ 'md'
+    , 'json'
+    , 'sql'
+    ]
+
     var files = fs.readdirSync(dir)
     for(var idx in files) {
       var con = true
@@ -56,7 +67,7 @@ var routes = function(app){
         if(isUnixHiddenPath(file)) {
           throw new Error('hidden file')
         }
-        if(excludedFileTypes.indexOf(file.split('.')[file.split.length - 1]) === -1) {
+        if(excludedFileTypes.indexOf(file.split('.')[file.split.length - 1]) !== -1) {
           throw new Error('unsupported type')
         }
       } catch(e) {
@@ -80,6 +91,9 @@ var routes = function(app){
     ( app.rootDir
     , null
     , [ app.rootDir + '/db'
+      , app.rootDir + '/node_modules'
+      , app.rootDir + '/public'
+      , app.rootDir + '/migrations'
       ]
     );
 

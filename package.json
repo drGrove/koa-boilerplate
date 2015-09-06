@@ -36,6 +36,7 @@
     "start": "PROD=true APP_HOST=0.0.0.0 APP_PORT=8886 node --harmony index.js",
     "postinstall": "cd public/swagger; bower install",
     "start-debug": "DEBUG=koa* APP_HOST=0.0.0.0 APP_PORT=8886 ./node_modules/nodemon/bin/nodemon.js --harmony --debug index.js",
+    "start-debug-brk": "DEBUG=koa* APP_HOST=0.0.0.0 APP_PORT=8886 ./node_modules/nodemon/bin/nodemon.js --harmony --debug-brk index.js",
     "test": "gulp --harmony test"
   }
 }
