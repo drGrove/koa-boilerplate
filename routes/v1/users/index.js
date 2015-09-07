@@ -183,42 +183,6 @@ module.exports = function(app){
   /**
    * @swagger
    * /v1/users/{id}:
-   *   delete:
-   *     operationId: deleteUserV1
-   *     summary: Remove User by id
-   *     tags:
-   *       - Users
-   *     parameters:
-   *       - name: id
-   *         type: integer
-   *         in: path
-   *         required: true
-   *         description: User ID
-   *     security:
-   *       - Authorization: []
-   *     responses:
-   *       204:
-   *         description: Delete user by id
-   */
-  function *remove() {
-    try {
-      var user = yield User.findById(this.params.id)
-      user.isActive = false
-      yield user.save()
-      yield user.destroy()
-      return this.status = 204
-    } catch (e) {
-      this.status = 500
-      this.body =
-      { error: true
-      , msg: e.errors || e.message
-      }
-    }
-  }
-
-  /**
-   * @swagger
-   * /v1/users/{id}:
    *   put:
    *     operationId: updateUserV1
    *     summary: Update user by id
@@ -269,4 +233,41 @@ module.exports = function(app){
       }
     }
   }
+
+  /**
+   * @swagger
+   * /v1/users/{id}:
+   *   delete:
+   *     operationId: deleteUserV1
+   *     summary: Remove User by id
+   *     tags:
+   *       - Users
+   *     parameters:
+   *       - name: id
+   *         type: integer
+   *         in: path
+   *         required: true
+   *         description: User ID
+   *     security:
+   *       - Authorization: []
+   *     responses:
+   *       204:
+   *         description: Delete user by id
+   */
+  function *remove() {
+    try {
+      var user = yield User.findById(this.params.id)
+      user.isActive = false
+      yield user.save()
+      yield user.destroy()
+      return this.status = 204
+    } catch (e) {
+      this.status = 500
+      this.body =
+      { error: true
+      , msg: e.errors || e.message
+      }
+    }
+  }
+
 }

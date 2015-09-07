@@ -60,7 +60,6 @@ var Route = db
           ( models.Role
           , { as: 'route'
             , through: 'RouteRoles'
-            , foreignKey: 'Route_id'
             }
           )
       }

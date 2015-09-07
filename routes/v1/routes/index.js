@@ -3,7 +3,7 @@ module.exports = function(app) {
   var Route = require(__dirname + '/model')
   var genError = require(app.rootDir + '/lib/error')
   var ensureAuth = require(app.rootDir + '/lib/ensureAuth')
-  var Role = require(__dirname + '/../roles/model')
+  var Role = require(__dirname + '/../roles/model')(app)
   var routeConfig =
   { "POST":
     { "/": create
@@ -47,21 +47,40 @@ module.exports = function(app) {
   function *create() {
     var body = this.request.body
     try {
-      let routeBody =
+      var routeBody =
       { url: body.url
       , method: body.method
       }
       delete body.url
       delete body.method
-      var route = yield Route.create(routeBody)
+      try {
+        var route = yield Route.create(routeBody)
+      } catch (e) {
+        console.error('Error: ', e)
+        var route = yield Route.findOne({
+          where: routeBody,
+          include: [Role]
+        })
+      }
       var role = yield Role.findById(body.role)
       yield role.addRoute(route)
       this.status = 201
       return this.body = route
     } catch (e) {
       console.error('Error: ', e)
-      this.status = 400
-      return this.body = genError("NOT_FOUND")
+      switch(e.name) {
+        case 'SequelizeUniqueConstraintError': {
+          console.error('Error: ', e)
+          this.status = 400
+          return this.body =
+          { error: true
+          , msg: e.errors || e.message
+          , errNo: 420
+          , errCode: 'UniqueConstraint'
+          }
+          break;
+        }
+      }
     }
   }
 
