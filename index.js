@@ -44,6 +44,7 @@ app.use(function*(next) {
   }
 })
 
+/*
 var swaggerStatic = staticNow({
   directory: __dirname + '/public/swagger',
   autostart: false
@@ -53,6 +54,21 @@ var bowerStatic = staticNow({
   directory: __dirname + '/public/swagger/bower_components',
   autostart: false
 })
+*/
+
+// Swagger
+app.use(swagger.init({
+  apiVersion: '1.0',
+  swaggerVersion: '2.0',
+  swaggerURL: '/api/v1/swagger',
+  swaggerJSON: '/api/v1/docs.json',
+  swaggerUI: 'node_modules/swagger-ui/dist',
+  basePath: 'http://ishortb.us:8886/',
+  info: {
+    title: 'API',
+    description: 'Blah'
+  }
+}))
 
 // Error Handler
 app.use(error())
@@ -70,8 +86,8 @@ app.use(function*(next) {
 })
 
 // Swagger
-app.use(mount('/swagger', swaggerStatic))
-app.use(mount('/bower_components', bowerStatic))
+//app.use(mount('/swagger', swaggerStatic))
+//app.use(mount('/bower_components', bowerStatic))
 
 // Sequelize Transactions
 app.use(require('koa-sequelize-transaction')({

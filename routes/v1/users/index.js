@@ -6,7 +6,8 @@ module.exports = function(app){
   var routeConfig =
   { "GET":
     { "/":
-      [ all
+      [ ensureAuth
+      , all
       ]
     , "/:id":
       [ ensureAuth
@@ -45,6 +46,8 @@ module.exports = function(app){
    *     - application/json
    *    tags:
    *     - Users
+   *    security:
+   *     - Authorization: []
    *    responses:
    *      200:
    *        description: Users get all
@@ -85,12 +88,14 @@ module.exports = function(app){
    *      - application/json
    *     tags:
    *      - Users
+   *     security:
+   *       - Authorization: []
    *     parameters:
    *       - name: User
    *         in: body
    *         required: true
    *         schema:
-   *           $ref: '#/definitions/User'
+   *           $ref: '#/definitions/NewUser'
    *     responses:
    *       200:
    *         description: Creates a user
@@ -137,10 +142,9 @@ module.exports = function(app){
    *     parameters:
    *       - name: id
    *         in: path
-   *         description: ID of user to fetch
-   *         required: true
    *         type: integer
-   *         format: int64
+   *         required: true
+   *         description: ID of user to fetch
    *     tags:
    *      - Users
    *     responses:
@@ -182,14 +186,16 @@ module.exports = function(app){
    *   delete:
    *     operationId: deleteUserV1
    *     summary: Remove User by id
-   *     parameters:
-   *       - name: id
-   *         in: path
-   *         description: ID of user to delete
-   *         type: integer
-   *         format: int64
    *     tags:
    *       - Users
+   *     parameters:
+   *       - name: id
+   *         type: integer
+   *         in: path
+   *         required: true
+   *         description: User ID
+   *     security:
+   *       - Authorization: []
    *     responses:
    *       204:
    *         description: Delete user by id
@@ -216,14 +222,16 @@ module.exports = function(app){
    *   put:
    *     operationId: updateUserV1
    *     summary: Update user by id
+   *     tags:
+   *       - Users
+   *     security:
+   *       - Authorization: []
    *     parameters:
    *       - name: id
    *         in: path
-   *         description: ID of user to update
    *         type: integer
-   *         format: int64
-   *     tags:
-   *       - Users
+   *         required: true
+   *         description: User ID
    *     responses:
    *       200:
    *         description: Update user by id

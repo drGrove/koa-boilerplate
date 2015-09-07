@@ -108,7 +108,7 @@ var routes = function(app){
           url: ''
         },
       },
-      host: config.app.host + ':' + config.app.port,
+      host: config.app.domain + ':' + config.app.port,
       basePath: config.app.namespace
     },
     apis: specs, // Path to the API docs
@@ -120,6 +120,7 @@ var routes = function(app){
   r.get('/docs.json', function*(next) {
     this.body = swaggerSpec
   });
+
 
   return r
 }

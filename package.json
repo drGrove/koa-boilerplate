@@ -21,7 +21,8 @@
     "sequelize": "^3.5.1",
     "static-now": "^0.3.0",
     "swagger-jsdoc": "drGrove/swagger-jsdoc",
-    "swagger-koa": "^1.0.8"
+    "swagger-koa": "^1.0.8",
+    "swagger-ui": "^2.1.2"
   },
   "devDependencies": {
     "expect": "^1.9.0",

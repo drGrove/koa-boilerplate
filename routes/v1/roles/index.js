@@ -43,8 +43,12 @@ module.exports = function(app) {
    *    summary: List Roles
    *    produces:
    *     - application/json
+   *    security:
+   *      - Authorization: []
    *    tags:
-   *     - Roles
+   *      - Roles
+   *    security:
+   *      - Authorization: []
    *    responses:
    *      200:
    *        description: Roles get all
@@ -82,17 +86,19 @@ module.exports = function(app) {
    *      - application/json
    *     tags:
    *      - Roles
+   *     security:
+   *      - Authorization: []
    *     parameters:
    *       - name: Roles
    *         in: body
    *         required: true
    *         schema:
-   *           $ref: '#/definitions/Roles'
+   *           $ref: '#/definitions/Role'
    *     responses:
    *       200:
    *         description: Creates a role
    *         schema:
-   *           $ref: '#/definitions/Roles'
+   *           $ref: '#/definitions/Role'
    */
   function *create() {
     var body = this.request.body
@@ -128,23 +134,25 @@ module.exports = function(app) {
   /**
    * @swagger
    * /v1/roles/{id}:
-   *   get:
-   *     operationId: listRolesByIdV1
-   *     summary: List Roles by id
-   *     parameters:
-   *       - name: id
-   *         in: path
-   *         description: ID of role to fetch
-   *         required: true
-   *         type: integer
-   *         format: int64
-   *     tags:
+   *  get:
+   *    operationId: listRolesByIdV1
+   *    summary: List Roles by id
+   *    parameters:
+   *      - name: id
+   *        in: path
+   *        description: ID of role to fetch
+   *        required: true
+   *        type: integer
+   *        format: int64
+   *    tags:
    *      - Roles
-   *     responses:
-   *       200:
-   *         description: Roles by ID
-   *         schema:
-   *           $ref: '#/definitions/Roles'
+   *    security:
+   *      - Authorization: []
+   *    responses:
+   *      200:
+   *        description: Roles by ID
+   *        schema:
+   *          $ref: '#/definitions/Role'
    */
   function *byId() {
     console.log('ID: ', this.params.id)
@@ -181,9 +189,9 @@ module.exports = function(app) {
    *     parameters:
    *       - name: id
    *         in: path
+   *         required: true
    *         description: ID of role to delete
    *         type: integer
-   *         format: int64
    *     tags:
    *       - Roles
    *     responses:
@@ -217,14 +225,14 @@ module.exports = function(app) {
    *         in: path
    *         description: ID of role to update
    *         type: integer
-   *         format: int64
+   *         required: true
    *     tags:
    *       - Roles
    *     responses:
    *       200:
    *         description: Update role by id
    *         schema:
-   *           $ref: '#/definitions/Roles'
+   *           $ref: '#/definitions/Role'
    */
   function *update() {
     var body = this.request.body

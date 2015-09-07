@@ -11,7 +11,8 @@ var Sequelize = require(__dirname + '/../../../lib/db').Sequelize
  *      - url
  *    properties:
  *      id:
- *        type: long
+ *        type: integer
+ *        format: int64
  *      url:
  *        type: string
  *  newRoute:

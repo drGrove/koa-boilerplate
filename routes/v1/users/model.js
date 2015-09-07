@@ -6,7 +6,7 @@ var bcrypt = require('bcryptjs')
 /**
  * @swagger
  * definition:
- *   User:
+ *   NewUser:
  *     type: object
  *     required:
  *       - id
@@ -17,9 +17,6 @@ var bcrypt = require('bcryptjs')
  *       - lastname
  *       - phone
  *     properties:
- *       id:
- *         type: integer
- *         format: int64
  *       firstname:
  *         type: string
  *       lastname:
@@ -51,6 +48,24 @@ var bcrypt = require('bcryptjs')
  *         format: int32
  *       isActive:
  *         type: boolean
+ *       createdAt:
+ *         type: string
+ *         format: date
+ *       updatedAt:
+ *         type: string
+ *         format: date
+ *       deletedAt:
+ *         type: string
+ *         format: date
+ *   User:
+ *     allOf:
+ *       - $ref: '#/definitions/NewUser'
+ *       - required:
+ *         - id
+ *         properties:
+ *           id:
+ *             type: integer
+ *             format: int64
  */
 var schema =
 { id:

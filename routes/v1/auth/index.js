@@ -61,13 +61,12 @@ module.exports = function(app) {
     }
   }
 
-
   /**
+   * @swagger
    * /v1/auth/login:
    *  post:
-   *    operationId:loginUserV1
-   *    accepts:
-   *      - application/json
+   *    operationId: loginUserV1
+   *    summary: Login User
    *    produces:
    *      - application/json
    *    parameters:
@@ -77,15 +76,18 @@ module.exports = function(app) {
    *        description: Login user parameters
    *        schema:
    *          $ref: '#/definitions/Login'
+   *    security:
+   *      - Authorization:
+   *        - write:users
    *    tags:
-   *     - Auth
+   *      - Auth
    *    responses:
    *      200:
-   *        description: User logged in
+   *        description: User logged out
    *        schema:
-   *          type: object
    *          $ref: '#/definitions/LoginResponse'
    */
+
   function *login() {
     var body = this.request.body
     try {
@@ -132,6 +134,8 @@ module.exports = function(app) {
    *    summary: Logout Current User
    *    produces:
    *      - application/json
+   *    security:
+   *      - Authorization: []
    *    tags:
    *      - Auth
    *    responses:
@@ -170,11 +174,21 @@ module.exports = function(app) {
    *       - application/json
    *     tags:
    *       - Auth
+   *     security:
+   *       - Authorization: []
    *     responses:
    *       200:
    *         description: Refresh and Bearer Token
-   *         schema: object
-   *         $ref: '#/definitions/LoginReponse'
+   *         schema:
+   *          $ref: '#/definitions/LoginResponse'
+   *       403:
+   *         description: Token Expiration
+   *         schema:
+   *          $ref: '#/definitions/TokenExpired'
+   *       500:
+   *        description: Internal Server Error
+   *        schema:
+   *          $ref: '#/definitions/InternalServerError'
    */
   function *refresh() {
     try {
@@ -192,7 +206,7 @@ module.exports = function(app) {
       }
     } catch (e) {
       if(e.message === 'TOKEN_EXPIRED') {
-        this.status = 400
+        this.status = 403
         return this.body = genErr('TOKEN_EXPIRED')
       }
     }
@@ -222,7 +236,7 @@ module.exports = function(app) {
    *         type: string
    *       expires:
    *         type: integer
-   *         description: Expiration in minutes
+   *         format: int64
    */
 
   return routeConfig;

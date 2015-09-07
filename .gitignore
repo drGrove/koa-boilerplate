@@ -4,3 +4,4 @@ bower_components
 *.log
 db/data
 *.env
+config.json
