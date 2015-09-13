@@ -54,6 +54,8 @@ var bcrypt = require('bcryptjs')
  *         type: boolean
  *       google:
  *         type: string
+ *       facebook:
+ *         type: string
  *       createdAt:
  *         type: string
  *         format: date
@@ -140,6 +142,14 @@ var schema =
   , allowNull: false
   }
 , google:
+  { type: Sequelize.STRING
+  , allowNull: true
+  }
+, facebook:
+  { type: Sequelize.STRING
+  , allowNull: true
+  }
+, github:
   { type: Sequelize.STRING
   , allowNull: true
   }

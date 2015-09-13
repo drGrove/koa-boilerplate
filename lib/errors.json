@@ -15,4 +15,9 @@
   , "errCode": "TOKEN_EXPIRED"
   , "errNo": 410
   }
+, "INTERNAL_SERVER_ERROR":
+  { "msg": "Internal Server Error"
+  , "errCode": "INTERNAL_SERVER_ERROR"
+  , "errNo": 500
+  }
 }
