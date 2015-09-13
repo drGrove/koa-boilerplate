@@ -21,6 +21,10 @@ var bcrypt = require('bcryptjs')
  *         type: string
  *       lastname:
  *         type: string
+ *       displayName:
+ *         type: string
+ *       nickname:
+ *         type: string
  *       email:
  *         type: string
  *         format: email
@@ -48,6 +52,8 @@ var bcrypt = require('bcryptjs')
  *         format: int32
  *       isActive:
  *         type: boolean
+ *       google:
+ *         type: string
  *       createdAt:
  *         type: string
  *         format: date
@@ -79,6 +85,14 @@ var schema =
 , lastname:
   { type: Sequelize.STRING
   }
+, nickname:
+  { type: Sequelize.STRING
+  , allowNull: true
+  }
+, displayName:
+  { type: Sequelize.STRING
+  , allowNull: true
+  }
 , email:
   { type: Sequelize.STRING
   , unique: true
@@ -91,7 +105,6 @@ var schema =
   }
 , password:
   { type: Sequelize.STRING
-  , allowNull: false
   }
 , address:
   { type: Sequelize.STRING
@@ -125,6 +138,10 @@ var schema =
   { type: Sequelize.BOOLEAN
   , defaultValue: true
   , allowNull: false
+  }
+, google:
+  { type: Sequelize.STRING
+  , allowNull: true
   }
 }
 
