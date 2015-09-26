@@ -1,6 +1,7 @@
 'use strict'
 module.exports = function(app) {
   var ensureAuth = require(app.rootDir + '/lib/ensureAuth')
+  var signup = require(__dirname + '/signup')(app)
   var login = require(__dirname + '/login')(app)
   var logout = require(__dirname + '/logout')(app)
   var refresh = require(__dirname + '/refresh')(app)
@@ -11,7 +12,8 @@ module.exports = function(app) {
 
   var routeConfig =
   { "POST":
-    { "/login": login
+    { "/signup": signup
+    , "/login": login
     , "/google": google
     , "/facebook": facebook
     , "/github": github
@@ -32,6 +34,6 @@ module.exports = function(app) {
     }
   }
 
-  
+
     return routeConfig;
 }

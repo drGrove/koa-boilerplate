@@ -86,6 +86,11 @@ module.exports = function(app) {
    *         type: string
    *         description: Password for user
    *   LoginResponse:
+   *     required:
+   *       - jwt 
+   *       - refresh 
+   *       - type 
+   *       - expires 
    *     properties:
    *       jwt:
    *         type: string
@@ -95,7 +100,6 @@ module.exports = function(app) {
    *         type: string
    *       expires:
    *         type: integer
-   *         format: int64
    */
 
   return login

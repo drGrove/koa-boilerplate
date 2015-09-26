@@ -14,6 +14,7 @@ var config = require('./lib/config')
 var genErr = require('./lib/error')
 var sequelize = require('./lib/db').sequelize
 var routes = require('./routes/index')
+var r = require('koa-router')()
 var app = koa()
 
 app.rootDir = __dirname
@@ -44,26 +45,14 @@ app.use(function*(next) {
   }
 })
 
-/*
-var swaggerStatic = staticNow({
-  directory: __dirname + '/public/swagger',
-  autostart: false
-})
-
-var bowerStatic = staticNow({
-  directory: __dirname + '/public/swagger/bower_components',
-  autostart: false
-})
-*/
-
 // Swagger
 app.use(swagger.init({
   apiVersion: '1.0',
   swaggerVersion: '2.0',
-  swaggerURL: '/api/v1/swagger',
-  swaggerJSON: '/api/v1/docs.json',
+  swaggerURL: config.app.namespace + '/swagger',
+  swaggerJSON: config.app.namespace + '/docs',
   swaggerUI: 'node_modules/swagger-ui/dist',
-  basePath: 'http://ishortb.us:8886/',
+  basePath: 'http://' + config.app.domain + ':' + config.app.port,
   info: {
     title: 'API',
     description: 'Blah'
@@ -85,18 +74,14 @@ app.use(function*(next) {
   }
 })
 
-// Swagger
-//app.use(mount('/swagger', swaggerStatic))
-//app.use(mount('/bower_components', bowerStatic))
-
 // Sequelize Transactions
 app.use(require('koa-sequelize-transaction')({
   sequelize: sequelize
 }))
 
 // Router
-app.use(mount('/api', routes(app).routes()))
-
+r.use(config.app.namespace, routes(app).routes())
+app.use(r.routes())
 
 app.listen(config.app.port, config.app.host, function() {
   console.log('Listening on http://%s:%s', config.app.host, config.app.port)
