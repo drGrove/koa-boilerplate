@@ -30,6 +30,7 @@
     "expect": "^1.9.0",
     "gulp": "^3.9.0",
     "gulp-jscs": "^2.0.0",
+    "gulp-jscs-stylish": "^1.2.1",
     "gulp-mocha-co": "^0.4.1-co.3",
     "mocha": "^2.3.0",
     "nodemon": "^1.4.1",
@@ -40,6 +41,38 @@
     "postinstall": "cd public/swagger; bower install",
     "start-debug": "DEBUG=koa* node --debug index.js",
     "start-debug-brk": "DEBUG=koa* APP_HOST=0.0.0.0 APP_PORT=8886 node --debug-brk index.js",
-    "test": "gulp --harmony test"
+    "test": "gulp test"
+  },
+  "jscsConfig": {
+    "preset": "node-style-guide",
+    "requireCapitalizedComments": null,
+    "excludeFiles": [
+      "node_modules/**",
+      "coverage/**",
+      "jsdoc/**"
+    ],
+    "disallowTrailingComma": true,
+    "requireTrailingComma": false,
+    "disallowSpacesInsideParentheses": false
+  },
+  "jshintConfig": {
+    "node": true,
+    "esnext": true,
+    "bitwise": true,
+    "camelcase": true,
+    "curly": true,
+    "eqeqeq": true,
+    "immed": true,
+    "indent": 2,
+    "latedef": true,
+    "newcap": true,
+    "noarg": true,
+    "quotmark": "single",
+    "undef": true,
+    "unused": true,
+    "strict": true,
+    "asi": true,
+    "laxcomma": true,
+    "noyield": true
   }
 }

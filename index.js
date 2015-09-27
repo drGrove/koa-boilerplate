@@ -1,15 +1,12 @@
 'use strict'
 
 var koa = require('koa')
-var mount = require('koa-mount')
 var swagger = require('swagger-koa')
 var bodyParser = require('koa-bodyparser')
 var morgan = require('koa-morgan')
 var responseTime = require('koa-response-time')
 var error = require('koa-error')
 var cors = require('koa-cors')
-var mount = require('koa-mount')
-var staticNow = require('static-now')
 var config = require('./lib/config')
 var genErr = require('./lib/error')
 var sequelize = require('./lib/db').sequelize
@@ -67,10 +64,12 @@ app.use(function*(next) {
   yield next;
   var status = this.status || 404;
   if (status === 404) {
-    return this.body =
+    this.body =
     { error: true
     , msg: 'Item not found'
     }
+
+    return this.body
   }
 })
 
