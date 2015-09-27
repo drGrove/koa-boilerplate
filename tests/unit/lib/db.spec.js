@@ -1,20 +1,25 @@
 'use strict'
-var expect = require('expect')
-var db = require(__dirname + '/db.js')
-var sequelize
+var db = require(process.env.PROJECT_ROOT + '/lib/db.js')
 
-describe('DB Connection Tests:', function(){
-  it('Should be an object', function(){
+describe('DB Connection Tests:', function() {
+  it('Should show this', function() {
+    expect(false).toBe(false)
+  })
+
+  it('Should be an object', function() {
     expect(typeof db).toBe('object');
   })
-  
+
   if (db.sequelize) {
-    sequelize = db.sequelize
-    it('Should have a connection to MySQL', function *(){
-      let stmt = "SHOW TABLES"
-      let tables = yield sequelize.query(stmt, {
-        type: sequelize.QueryTypes.SHOWTABLES
-      })
+    var sequelize = db.sequelize
+    it ('Should have a connection to MySQL', function *() {
+      let stmt = 'SHOW TABLES'
+      let tables = yield sequelize
+        .query
+        ( stmt
+        , { type: sequelize.QueryTypes.SHOWTABLES
+          }
+        )
       expect(Array.isArray(tables)).toBe(true)
     })
   }

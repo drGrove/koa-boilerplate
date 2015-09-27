@@ -51,7 +51,8 @@
     ],
     "disallowTrailingComma": true,
     "requireTrailingComma": false,
-    "disallowSpacesInsideParentheses": false
+    "disallowSpacesInsideParentheses": false,
+    "disallowSpacesInFunction": false
   },
   "jshintConfig": {
     "node": true,
@@ -78,6 +79,6 @@
     "postinstall": "bower install -y --config.cwd=public/swagger",
     "start-debug": "DEBUG=koa* node --debug index.js",
     "start-debug-brk": "DEBUG=koa* APP_HOST=0.0.0.0 APP_PORT=8886 node --debug-brk index.js",
-    "test": "gulp test"
+    "test": "PACKAGE_ROOT=$PWD node node_modules/gulp/bin/gulp.js test"
   }
 }

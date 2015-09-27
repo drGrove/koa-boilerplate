@@ -15,7 +15,8 @@ gulp.task('lint', function(done){
   return gulp.src([
     './lib/**.js',
     './routes/**.js',
-    './index.js'
+    './index.js',
+    './tests/**/**.spec.js'
   ])
   .pipe(jshint(pkg.jshintConfig))
   .pipe(jscs(pkg.jscsConfig))
