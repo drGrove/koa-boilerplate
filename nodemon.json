@@ -1,0 +1,11 @@
+{ "verbose": true
+, "ignore":
+  [ "db/*"
+  ]
+, "watch":
+  [ "routes/**/**.js"
+  , "lib/**/**.js"
+  , "tests/**/**.js"
+  , "index.js"
+  ]
+}

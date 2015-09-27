@@ -110,7 +110,6 @@ var routes = function(app) {
       ]
     );
 
-
   var swaggerOptions =
   { swaggerDefinition:
     { swagger: '2.0'
@@ -132,7 +131,6 @@ var routes = function(app) {
   var swaggerSpec = swaggerJSDoc(swaggerOptions);
 
   r.get('/docs.json', function*() {
-    console.log('swagger spec: ', swaggerSpec)
     this.body = swaggerSpec
   });
 
