@@ -3,6 +3,8 @@ node_js:
   - "4.1.1"
 before_install:
   - npm install -g npm
+  - npm --version
+  - npm install -g bower
   - npm install -g gulp
   - npm install -g wrench
 
