@@ -14,14 +14,14 @@ module.exports = function(app) {
    * /v1/auth/facebook:
    *   get:
    *     operationId: facebookAuthV1
-   *     summary: Auth with Login
+   *     summary: Authenticate user via Facebook
    *     produces:
    *       - application/json
    *     tags:
    *       - Auth
    *     responses:
    *       200:
-   *         description: Login via Google Successful
+   *         description: Login via Facebook Successful
    *         $ref: '#/definitions/LoginResponse'
    */
   function *facebook() {

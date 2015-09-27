@@ -1,6 +1,14 @@
 {
   "name": "package",
-  "version": "0.0.0",
+  "version": "0.5.0",
+  "repository": "drGrove/koa-boilerplate",
+  "engines": {
+    "node": ">=4.0"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/drGrove/koa-boilerplate/issues"
+  },
   "dependencies": {
     "bcryptjs": "^2.2.1",
     "jsonwebtoken": "^5.0.5",
@@ -9,37 +17,75 @@
     "koa-cors": "0.0.16",
     "koa-error": "^1.1.3",
     "koa-morgan": "^0.3.0",
-    "koa-mount": "^1.3.0",
     "koa-request": "^1.0.0",
     "koa-response-time": "^1.0.2",
     "koa-router": "^5.1.2",
     "koa-sequelize-transaction": "0.0.1",
-    "koa-static": "^1.4.9",
-    "koa-static-folder": "^0.1.5",
     "koa-trace": "^1.0.0",
     "mongoose": "^4.1.3",
     "mysql": "^2.9.0",
+    "nodemon": "^1.7.1",
+    "path": "^0.11.14",
     "querystring": "^0.2.0",
     "sequelize": "^3.5.1",
-    "static-now": "^0.3.0",
-    "swagger-jsdoc": "drGrove/swagger-jsdoc",
+    "swagger-jsdoc": "drGrove/swagger-jsdoc#feature/securityDefinitions",
     "swagger-koa": "^1.0.8",
     "swagger-ui": "^2.1.2"
   },
   "devDependencies": {
+    "assert": "^1.3.0",
+    "co": "^4.6.0",
+    "co-supertest": "0.0.10",
     "expect": "^1.9.0",
     "gulp": "^3.9.0",
     "gulp-jscs": "^2.0.0",
+    "gulp-jscs-stylish": "^1.2.1",
     "gulp-mocha-co": "^0.4.1-co.3",
     "mocha": "^2.3.0",
-    "nodemon": "^1.4.1",
-    "path": "^0.11.14"
+    "should": "^7.1.0"
+  },
+  "jscsConfig": {
+    "preset": "node-style-guide",
+    "requireCapitalizedComments": null,
+    "excludeFiles": [
+      "node_modules/**",
+      "coverage/**",
+      "jsdoc/**"
+    ],
+    "disallowTrailingComma": true,
+    "requireTrailingComma": false,
+    "disallowSpacesInsideParentheses": false,
+    "disallowSpacesInFunction": false
+  },
+  "jshintConfig": {
+    "node": true,
+    "esnext": true,
+    "bitwise": true,
+    "camelcase": true,
+    "curly": true,
+    "eqeqeq": true,
+    "immed": true,
+    "indent": 2,
+    "latedef": true,
+    "newcap": true,
+    "noarg": true,
+    "quotmark": "single",
+    "undef": true,
+    "unused": true,
+    "strict": true,
+    "asi": true,
+    "laxcomma": true,
+    "noyield": true,
+    "globals": {
+      "promise": true,
+      "expect": true
+    }
   },
   "scripts": {
-    "start": "PROD=true APP_HOST=0.0.0.0 APP_PORT=8886 node --harmony index.js",
-    "postinstall": "cd public/swagger; bower install",
-    "start-debug": "DEBUG=koa* APP_HOST=0.0.0.0 APP_PORT=8886 ./node_modules/nodemon/bin/nodemon.js --harmony --debug index.js",
-    "start-debug-brk": "DEBUG=koa* APP_HOST=0.0.0.0 APP_PORT=8886 ./node_modules/nodemon/bin/nodemon.js --harmony --debug-brk index.js",
-    "test": "gulp --harmony test"
+    "start": "PROD=true APP_HOST=0.0.0.0 APP_PORT=8886 node index.js",
+    "postinstall": "bower install -y --config.cwd=public/swagger",
+    "start-debug": "DEBUG=koa* ./node_modules/nodemon/bin/nodemon.js --debug index.js",
+    "start-debug-brk": "DEBUG=koa* APP_HOST=0.0.0.0 APP_PORT=8886 ./node_modules/nodemon/bin/nodemon.js --debug-brk index.js",
+    "test": "APP_PORT=8887 TESTING=true PROJECT_ROOT=$PWD gulp test"
   }
 }

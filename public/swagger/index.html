@@ -6,19 +6,35 @@
   <link rel="stylesheet" href="bower_components/angular-swagger-ui/dist/css/swagger-ui.min.css" />
 </head>
 <body ng-controller="MainCtrl">
-  <div swagger-ui url="'/api/v1/docs.json'" api-explorer-transform="transform" api-explorer="true"></div>
+  <div
+    swagger-ui url="'/api/v1/docs.json'"
+    api-explorer="true"
+  >
+  </div>
 
   <script src="bower_components/angular/angular.min.js"></script>
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
   <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="bower_components/ngSantize/index.js"></script>
   <script src="bower_components/angular-swagger-ui/dist/scripts/swagger-ui.js"></script>
   <script type="text/javascript">
-    angular.module('Explorer', ['swaggerUi'])
-      .controller('MainCtrl', ['$scope', function($scope){
-        $scope.transform = function(request) {
-          console.log(request)
-        }
-      }])
+    function MainCtrl($scope) {
+      $scope.transform = function(request) {
+        console.log(request)
+      }
+    }
+
+    angular
+      .module
+      ( 'Explorer'
+      , [ 'ngSantize'
+        , 'swaggerUi'
+        ]
+      )
+      .controller
+      ( 'MainCtrl'
+      , MainCtrl
+      )
   </script>
 </body>
 </html>

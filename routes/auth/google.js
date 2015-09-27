@@ -13,7 +13,7 @@ module.exports = function(app) {
    * /v1/auth/google:
    *   get:
    *     operationId: googleAuthV1
-   *     summary: Auth with Google
+   *     summary: Authenticate user via Google
    *     produces:
    *       - application/json
    *     tags:

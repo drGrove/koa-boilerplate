@@ -1,6 +1,6 @@
 'use strict'
 module.exports = function(app) {
-  var Route = require(__dirname + '/model')
+  var Route = require(__dirname + '/model')(app)
   var genError = require(app.rootDir + '/lib/error')
   var ensureAuth = require(app.rootDir + '/lib/ensureAuth')
   var Role = require(__dirname + '/../roles/model')(app)

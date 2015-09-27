@@ -2,7 +2,8 @@
 module.exports = function(app) {
   var db = require(app.rootDir + '/lib/db').sequelize
   var Sequelize = require(app.rootDir + '/lib/db').Sequelize
-  var Route = require(__dirname + '/../routes/model')
+  var Route = require(__dirname + '/../routes/model')(app)
+  var User = require(__dirname + '/../users/model')(app)
 
   /**
    * @swagger
@@ -54,6 +55,24 @@ module.exports = function(app) {
     , { through: 'RouteRoles'
       , foreignKey: 'RouteId'
       , constraints: 'pk_RouteRole'
+      }
+    )
+
+  Role
+    .belongsToMany
+    ( User
+    , { through: 'UserRoles'
+      , foreignKey: 'roleId'
+      , constraints: 'pk_UserRole'
+      }
+    )
+
+  User
+    .belongsToMany
+    ( Role
+    , { through: 'UserRoles'
+      , foreignKey: 'userId'
+      , constraints: 'pk_UserRole'
       }
     )
 

@@ -9,6 +9,4 @@ wrench.readdirSyncRecursive('./gulp').filter(function(file){
   require('./gulp/' + file);
 })
 
-gulp.task('default', ['test'], function () {
-  gulp.start('test')
-})
+gulp.task('default', ['test'])
