@@ -1,5 +1,7 @@
 #Koa Boilerplate
 
+[![Build Status](https://travis-ci.org/drGrove/koa-boilerplate.svg?branch=master)](https://travis-ci.org/drGrove/koa-boilerplate)
+
 ##Getting Started
 ```bash
 $ git clone http://github.com/drGrove/koa-boilerplate projectName
