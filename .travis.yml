@@ -6,4 +6,5 @@ before_install:
   - npm --version
   - npm install -g bower
   - npm install -g gulp
+  - npm install -g gulp-cli
 script: gulp
