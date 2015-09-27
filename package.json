@@ -31,15 +31,24 @@
     "swagger-ui": "^2.1.2"
   },
   "devDependencies": {
+    "assert": "^1.3.0",
     "bower": "^1.5.3",
+    "co": "^4.6.0",
     "expect": "^1.9.0",
     "gulp": "^3.9.0",
     "gulp-jscs": "^2.0.0",
     "gulp-jscs-stylish": "^1.2.1",
+    "gulp-mocha": "^2.1.3",
     "gulp-mocha-co": "^0.4.1-co.3",
+    "karma": "^0.13.10",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-mocha": "^0.2.0",
+    "karma-phantomjs-launcher": "^0.2.1",
     "mocha": "^2.3.0",
     "nodemon": "^1.4.1",
-    "path": "^0.11.14"
+    "path": "^0.11.14",
+    "phantomjs": "^1.9.18",
+    "should": "^7.1.0"
   },
   "jscsConfig": {
     "preset": "node-style-guide",
@@ -72,13 +81,17 @@
     "strict": true,
     "asi": true,
     "laxcomma": true,
-    "noyield": true
+    "noyield": true,
+    "globals": {
+      "promise": true,
+      "expect": true
+    }
   },
   "scripts": {
     "start": "PROD=true APP_HOST=0.0.0.0 APP_PORT=8886 node --harmony index.js",
     "postinstall": "bower install -y --config.cwd=public/swagger",
     "start-debug": "DEBUG=koa* node --debug index.js",
     "start-debug-brk": "DEBUG=koa* APP_HOST=0.0.0.0 APP_PORT=8886 node --debug-brk index.js",
-    "test": "PACKAGE_ROOT=$PWD node node_modules/gulp/bin/gulp.js test"
+    "test": "gulp test"
   }
 }
