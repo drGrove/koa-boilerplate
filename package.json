@@ -75,9 +75,9 @@
   },
   "scripts": {
     "start": "PROD=true APP_HOST=0.0.0.0 APP_PORT=8886 node --harmony index.js",
-    "postinstall": "./node_modules/bower/bin/bower install -y --config.cwd=public/swagger",
+    "postinstall": "bower install -y --config.cwd=public/swagger",
     "start-debug": "DEBUG=koa* node --debug index.js",
     "start-debug-brk": "DEBUG=koa* APP_HOST=0.0.0.0 APP_PORT=8886 node --debug-brk index.js",
-    "test": "./node_modules/gulp/bin/gulp.js test"
+    "test": "gulp test"
   }
 }
