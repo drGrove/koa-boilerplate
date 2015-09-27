@@ -4,8 +4,10 @@ var mocha = require('gulp-mocha-co')
 gulp.task('test', ['lint'], function() {
   gulp
     .src
-    ( [ './tests/unit/**/**.spec.js'
+    ( [ './tests/**/**.spec.js'
       ]
     )
-    .pipe(mocha({ reporter: 'nyan'}))
+    .pipe(mocha({
+      reporter: 'list'
+    }))
 })

@@ -13,11 +13,5 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.4.3",
-    "bootstrap": "~3.3.5",
-    "angular-swagger-ui": "~0.1.6"
-  },
-  "resolutions": {
-    "angular": "~1.4.3"
   }
 }

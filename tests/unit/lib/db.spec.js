@@ -2,7 +2,7 @@
 var expect = require('expect')
 var db = require(process.env.PROJECT_ROOT + '/lib/db.js')
 
-describe('DB Connection Tests:', function () {
+describe('DB Connection:', function () {
   it('Should show this', function () {
     expect(false).toBe(false)
   })

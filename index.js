@@ -47,8 +47,9 @@ app.use(swagger.init({
   apiVersion: '1.0',
   swaggerVersion: '2.0',
   swaggerURL: config.app.namespace + '/swagger',
-  swaggerJSON: config.app.namespace + '/docs',
+  swaggerJSON: config.app.namespace + '/docs.json',
   swaggerUI: 'node_modules/swagger-ui/dist',
+  // swaggerUI: './public/swagger/',
   basePath: 'http://' + config.app.domain + ':' + config.app.port,
   info: {
     title: 'API',
@@ -82,6 +83,10 @@ app.use(require('koa-sequelize-transaction')({
 r.use(config.app.namespace, routes(app).routes())
 app.use(r.routes())
 
-app.listen(config.app.port, config.app.host, function() {
-  console.log('Listening on http://%s:%s', config.app.host, config.app.port)
-})
+if (process.env.TESTING) {
+  module.exports = app
+} else {
+  app.listen(config.app.port, config.app.host, function() {
+    console.log(`Listeing on http://${config.app.host}:${config.app.port}`)
+  })
+}

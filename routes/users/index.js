@@ -66,7 +66,7 @@ module.exports = function(app){
       for (var i = 0; i < users.length; i++) {
         delete users[i].password;
       }
-      this.status = 201
+      this.status = 200
       return this.body = users
     } catch (e) {
       console.error('Error: ', e.stack || e)

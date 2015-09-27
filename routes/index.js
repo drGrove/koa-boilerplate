@@ -106,10 +106,10 @@ var routes = function(app) {
       , app.rootDir + '/gulp'
       , app.rootDir + '/gulpfile.js'
       , app.rootDir + '/migrations'
+      , app.rootDir + '/tests'
       ]
     );
 
-  console.log('specs:', specs)
 
   var swaggerOptions =
   { swaggerDefinition:
