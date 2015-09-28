@@ -1,0 +1,7 @@
+ALTER TABLE
+  Users
+ADD COLUMN
+  linkedin VARCHAR(255) NULL UNIQUE
+AFTER
+  github
+;
