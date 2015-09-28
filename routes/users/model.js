@@ -57,6 +57,10 @@ module.exports = function(app) {
    *         type: string
    *       facebook:
    *         type: string
+   *       github:
+   *         type: string
+   *       linkedin:
+   *         type: string
    *       createdAt:
    *         type: string
    *         format: date
@@ -154,6 +158,11 @@ module.exports = function(app) {
     { type: Sequelize.STRING
     , allowNull: true
     }
+  , linkedin:
+    { type: Sequelize.STRING
+    , allowNull: true
+    }
+
   }
 
   /**
