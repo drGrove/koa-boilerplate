@@ -10,7 +10,7 @@ module.exports = function(app) {
 
   /**
    * @swagger
-   * /v1/auth/google:
+   * /auth/google:
    *   get:
    *     operationId: googleAuthV1
    *     summary: Authenticate user via Google

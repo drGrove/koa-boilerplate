@@ -6,7 +6,7 @@ module.exports = function(app) {
 
   /**
    * @swagger
-   * /v1/auth/logout:
+   * /auth/logout:
    *  get:
    *    operationId: logoutUserV1
    *    summary: Logout Current User

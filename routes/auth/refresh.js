@@ -6,7 +6,7 @@ module.exports = function(app) {
 
   /**
    * @swagger
-   * /v1/auth/refresh:
+   * /auth/refresh:
    *   get:
    *     operationId: refreshAuthTokenV1
    *     summary: Refresh User Auth token

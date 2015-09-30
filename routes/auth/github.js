@@ -10,7 +10,7 @@ module.exports = function(app) {
 
   /**
    * @swagger
-   * /v1/auth/github:
+   * /auth/github:
    *  post:
    *    operationId: githubAuthV1
    *    summary: Authenticate user via github

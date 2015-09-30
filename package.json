@@ -43,6 +43,7 @@
     "gulp-mocha-co": "^0.4.1-co.3",
     "mocha": "^2.3.0",
     "nodemon": "^1.4.1",
+    "sequelize-cli": "^1.9.1",
     "should": "^7.1.0"
   },
   "jscsConfig": {
@@ -88,6 +89,7 @@
     "postinstall": "bower install -y --config.cwd=public/swagger",
     "start-debug": "DEBUG=koa* ./node_modules/nodemon/bin/nodemon.js --debug index.js",
     "start-debug-brk": "DEBUG=koa* APP_HOST=0.0.0.0 APP_PORT=8886 ./node_modules/nodemon/bin/nodemon.js --debug-brk index.js",
-    "test": "APP_PORT=8887 TESTING=true PROJECT_ROOT=$PWD mocha tests/unit/*"
+    "test": "APP_PORT=8887 TESTING=true PROJECT_ROOT=$PWD mocha tests/unit/*",
+    "sequelize": "./node_modules/.bin/sequelize"
   }
 }

@@ -11,7 +11,7 @@ module.exports = function(app) {
 
   /**
    * @swagger
-   * /v1/auth/facebook:
+   * /auth/facebook:
    *   get:
    *     operationId: facebookAuthV1
    *     summary: Authenticate user via Facebook

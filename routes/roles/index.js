@@ -37,7 +37,7 @@ module.exports = function(app) {
 
   /**
    * @swagger
-   * /v1/roles:
+   * /roles:
    *  get:
    *    operationId: listRolesV1
    *    summary: List Roles
@@ -78,7 +78,7 @@ module.exports = function(app) {
   }
   /**
    * @swagger
-   * /v1/roles:
+   * /roles:
    *   post:
    *     operationId: createRolesV1
    *     summary: Creates a new Roles.
@@ -133,7 +133,7 @@ module.exports = function(app) {
 
   /**
    * @swagger
-   * /v1/roles/{id}:
+   * /roles/{id}:
    *  get:
    *    operationId: listRolesByIdV1
    *    summary: List Roles by id
@@ -182,7 +182,7 @@ module.exports = function(app) {
 
   /**
    * @swagger
-   * /v1/roles/{id}:
+   * /roles/{id}:
    *   delete:
    *     operationId: deleteRolesV1
    *     summary: Remove Roles by id
@@ -216,7 +216,7 @@ module.exports = function(app) {
 
   /**
    * @swagger
-   * /v1/roles/{id}:
+   * /roles/{id}:
    *   put:
    *     operationId: updateRolesV1
    *     summary: Update role by id

@@ -12,7 +12,7 @@ module.exports = function(app) {
 
   /**
    * @swagger
-   *  /v1/auth/linkedin:
+   *  /auth/linkedin:
    *    get:
    *      operationId: linkedinAuthV1
    *      summary: Authenticate user via LinkedIn

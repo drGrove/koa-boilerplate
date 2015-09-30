@@ -11,7 +11,6 @@ module.exports = function(app) {
    *     type: object
    *     required:
    *       - id
-   *       - username
    *       - password
    *       - email
    *       - firstname
@@ -29,8 +28,6 @@ module.exports = function(app) {
    *       email:
    *         type: string
    *         format: email
-   *       username:
-   *         type: string
    *       password:
    *         type: string
    *         format: password
@@ -101,11 +98,6 @@ module.exports = function(app) {
     , allowNull: true
     }
   , email:
-    { type: Sequelize.STRING
-    , unique: true
-    , allowNull: false
-    }
-  , username:
     { type: Sequelize.STRING
     , unique: true
     , allowNull: false
@@ -229,19 +221,6 @@ module.exports = function(app) {
         }
       }
     , paranoid: true
-    /*
-    , classMethods:
-      { associate: function(models) {
-          return User
-            .belongsToMany
-            ( models.Role
-            , { through: 'UserRoles'
-
-              }
-            )
-        }
-      }
-    */
     }
   )
 

@@ -3,7 +3,7 @@
 module.exports = function(app) {
   var User = require(__dirname + '/../users/model')(app)
   var Role = require(__dirname + '/../roles/model')(app)
-  var utilities = require(app.rootDir + '/lib/utilities')
+  var utilities = require(app.rootDir + '/lib/utilities')(app)
   var Token = require(app.rootDir + '/lib/models/tokens')
   var UserRole = require(app.rootDir + '/lib/models/userRoles')
 
@@ -26,6 +26,29 @@ module.exports = function(app) {
       }
     )
 
+  /**
+   *  @swagger
+   *  /auth/signup:
+   *    post:
+   *      operationId: signUpV1
+   *      summary: Sign up a user
+   *      produces:
+   *        - application/json
+   *      parameters:
+   *        - name: signup
+   *          in: body
+   *          required: true
+   *          description: sign up object
+   *          schema:
+   *            $ref: '#/definitions/SignUp'
+   *      tags:
+   *        - Auth
+   *      responses:
+   *        200:
+   *          description: Bearer token
+   *          schema:
+   *            $ref: '#/definitions/LoginResponse'
+   */
   function *signup() {
     var existingUser = yield User.findOne({
       where:
@@ -55,9 +78,10 @@ module.exports = function(app) {
           }
         ]
       })
-      console.log('User: ', user)
-      var role = Role.findById(3)
-      yield user.addRole(role, {userId: user.id});
+
+      var role = yield Role.findById(3)
+      console.log('role: ', role)
+      yield UserRole.create({userId: user.id, roleId: role.id})
 
       user = JSON.parse(JSON.stringify(user))
       delete user.password;

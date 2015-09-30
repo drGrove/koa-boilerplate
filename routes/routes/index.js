@@ -29,7 +29,7 @@ module.exports = function(app) {
 
   /**
    * @swagger
-   * /api/v1/routes:
+   * /routes:
    *  post:
    *    operationId: createRouteReferenceV1
    *    summary: Create a reference to a route for role based endpoints
@@ -86,7 +86,7 @@ module.exports = function(app) {
 
   /**
    * @swagger
-   * /api/v1/routes:
+   * /routes:
    *   get:
    *     operationId: getRoutesReferenceV1
    *     summary: Returns list of routes with roles

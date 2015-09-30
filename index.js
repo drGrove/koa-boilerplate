@@ -64,7 +64,7 @@ app.use(error())
 app.use(function*(next) {
   yield next;
   var status = this.status || 404;
-  if (status === 404) {
+  if (this.status === 404) {
     this.body =
     { error: true
     , msg: 'Item not found'

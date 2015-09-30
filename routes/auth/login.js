@@ -8,7 +8,7 @@ module.exports = function(app) {
 
   /**
    * @swagger
-   * /v1/auth/login:
+   * /auth/login:
    *  post:
    *    operationId: loginUserV1
    *    summary: Login User
@@ -76,7 +76,7 @@ module.exports = function(app) {
    * definition:
    *   Login:
    *     required:
-   *       - username
+   *       - email
    *       - password
    *     properties:
    *       email:
@@ -87,10 +87,10 @@ module.exports = function(app) {
    *         description: Password for user
    *   LoginResponse:
    *     required:
-   *       - jwt 
-   *       - refresh 
-   *       - type 
-   *       - expires 
+   *       - jwt
+   *       - refresh
+   *       - type
+   *       - expires
    *     properties:
    *       jwt:
    *         type: string

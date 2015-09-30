@@ -38,7 +38,7 @@ module.exports = function(app){
 
   /**
    * @swagger
-   * /v1/users:
+   * /users:
    *  get:
    *    operationId: listUsersV1
    *    summary: List Users
@@ -80,7 +80,7 @@ module.exports = function(app){
   }
   /**
    * @swagger
-   * /v1/users:
+   * /users:
    *   post:
    *     operationId: createUsersV1
    *     summary: Creates a new User.
@@ -135,7 +135,7 @@ module.exports = function(app){
 
   /**
    * @swagger
-   * /v1/users/{id}:
+   * /users/{id}:
    *   get:
    *     operationId: listUserByIdV1
    *     summary: List User by id
@@ -182,7 +182,7 @@ module.exports = function(app){
 
   /**
    * @swagger
-   * /v1/users/{id}:
+   * /users/{id}:
    *   put:
    *     operationId: updateUserV1
    *     summary: Update user by id
@@ -236,7 +236,7 @@ module.exports = function(app){
 
   /**
    * @swagger
-   * /v1/users/{id}:
+   * /users/{id}:
    *   delete:
    *     operationId: deleteUserV1
    *     summary: Remove User by id
