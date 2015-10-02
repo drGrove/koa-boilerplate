@@ -5,7 +5,7 @@ module.exports = function(app){
 
   var routeConfig =
   { "GET":
-    { "/":
+    { "":
       [ ensureAuth
       , all
       ]
@@ -154,28 +154,31 @@ module.exports = function(app){
    *           $ref: '#/definitions/User'
    */
   function *byId() {
-    console.log('ID: ', this.params.id)
-    try {
-      var user = JSON.parse(
-          JSON.stringify(
-            yield User.findById(
-              this.params.id
+    if(this.params.id === 'me') {
+      yield me(this)
+    } else {
+      try {
+        var user = JSON.parse(
+            JSON.stringify(
+              yield User.findById(
+                this.params.id
+              )
             )
           )
-        )
-      delete user.password
-      this.body = user
-    } catch (e) {
-      switch(e.name) {
-        case "TypeError":
-          this.status = 404;
-          break;
-        default:
-          this.status = 500
-          this.body =
-          { error: true
-          , msg: e.message
-          }
+        delete user.password
+        this.body = user
+      } catch (e) {
+        switch(e.name) {
+          case "TypeError":
+            this.status = 404;
+            break;
+          default:
+            this.status = 500
+            this.body =
+            { error: true
+            , msg: e.message
+            }
+        }
       }
     }
   }
@@ -268,6 +271,36 @@ module.exports = function(app){
       , msg: e.errors || e.message
       }
     }
+  }
+
+  /**
+   *  @swagger
+   *  /users/me:
+   *    get:
+   *      operationId: getMeV1
+   *      summary: Get the current logged in user information
+   *      tags:
+   *        - Users
+   *      security:
+   *        - Authorization: []
+   *      responses:
+   *        200:
+   *          description: User object
+   *          $ref: '#/definitions/User'
+   *        401:
+   *          description: Not Authorized
+   *          $ref: '#/definitions/GeneralError'
+   */
+  function *me(that) {
+    var user = JSON.parse(
+      JSON.stringify(
+        yield User.findById(that.auth.id)
+      )
+    )
+
+    delete user.password
+    that.body = user
+    return that
   }
 
 }

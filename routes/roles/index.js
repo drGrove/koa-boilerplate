@@ -5,9 +5,7 @@ module.exports = function(app) {
 
   var routeConfig =
   { "GET":
-    { "/":
-      [ all
-      ]
+    { "/": all
     , "/:id":
       [ ensureAuth
       , byId

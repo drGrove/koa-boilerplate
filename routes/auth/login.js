@@ -2,9 +2,9 @@
 
 module.exports = function(app) {
   var request = require('koa-request')
-  var utilities = require(app.rootDir + '/lib/utilities')
+  var utilities = require(app.rootDir + '/lib/utilities')(app)
   var Token = require(app.rootDir + '/lib/models/tokens')
-  var User = require(__dirname + '/../users/model')
+  var User = require(__dirname + '/../users/model')(app)
 
   /**
    * @swagger
@@ -36,11 +36,18 @@ module.exports = function(app) {
   function *login() {
     var body = this.request.body
     try {
-      let user = yield User
+      var user = yield User
         .findOne
-        ( { email: body.email
+        ( { where:
+            { email: body.email
+            }
           }
         )
+
+      if(!user) {
+        throw new Error('User does not exist')
+      }
+
       var isMatch = user.validPassword(body.password)
       if(isMatch) {
         try {
@@ -51,11 +58,12 @@ module.exports = function(app) {
             refresh: refresh,
             userId: user.id
           })
-          return this.body =
+          this.body =
           { token: token
           , refresh: refresh
           , type: 'bearer'
           }
+          return this.body
         } catch (e) {
           throw e
         }
@@ -68,6 +76,7 @@ module.exports = function(app) {
       { error: true
       , msg: e.message
       }
+      return this.body
     }
   }
 

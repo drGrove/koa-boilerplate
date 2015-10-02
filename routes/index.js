@@ -2,6 +2,7 @@
 
 var routes = function(app) {
   var r = require('koa-router')()
+  var compose = require('koa-compose')
   var path = require('path')
   var fs = require('fs')
   var swaggerJSDoc = require('swagger-jsdoc')
@@ -28,13 +29,12 @@ var routes = function(app) {
     var paths = require('./' + dir)(app)
     for (var method in paths) {
       for (var path in paths[method]) {
-        var callback = paths[method][path]
+        var args = paths[method][path]
         var uri = '/' + dir + path
-        if (Array.isArray(callback)) {
-          callback.unshift(uri)
-          r[method.toLowerCase()].apply(r, callback)
+        if(Array.isArray(args)) {
+          r[method.toLowerCase()](uri, compose(args))
         } else {
-          r[method.toLowerCase()](uri, callback)
+          r[method.toLowerCase()](uri, args)
         }
       }
     }

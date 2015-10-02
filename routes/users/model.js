@@ -213,7 +213,8 @@ module.exports = function(app) {
           })
         }
       , validPassword: function(password, next) {
-          return bcrypt.compareSync(password, this.password)
+          var isValid = bcrypt.compareSync(password, this.password)
+          return isValid
         }
       , toJSON: function() {
           this.dataValues.password = null

@@ -28,6 +28,23 @@ app.use(cors())
 // Body Parser
 app.use(bodyParser())
 
+// Error Handler
+app.use(error())
+
+// 404 Handler
+app.use(function*(next) {
+  yield next;
+  var status = this.status || 404;
+  if (this.status === 404) {
+    this.status = 404
+    this.body =
+    { error: true
+    , msg: 'Item not found'
+    }
+
+    return this.body
+  }
+})
 // 401 Handler
 app.use(function*(next) {
   try {
@@ -36,11 +53,14 @@ app.use(function*(next) {
     if (401 === err.status) {
       this.status = 401
       this.body = genErr('NO_AUTH')
+      return this.body
     } else {
       yield next
     }
   }
 })
+
+
 
 // Swagger
 app.use(swagger.init({
@@ -56,23 +76,6 @@ app.use(swagger.init({
     description: 'Blah'
   }
 }))
-
-// Error Handler
-app.use(error())
-
-// 404 Handler
-app.use(function*(next) {
-  yield next;
-  var status = this.status || 404;
-  if (this.status === 404) {
-    this.body =
-    { error: true
-    , msg: 'Item not found'
-    }
-
-    return this.body
-  }
-})
 
 // Sequelize Transactions
 app.use(require('koa-sequelize-transaction')({
