@@ -11,8 +11,8 @@ $ node run start-debug
 ```
 
 ##TODO
-- [ ] Add bcrypt and jwt
-- [ ] Add connection to mysql,sqlite3,postgres (Sequelize)
-- [ ] Add Third-party login integration (google, github, ...)
+- [X] Add bcrypt and jwt
+- [X] Add connection to mysql,sqlite3,postgres (Sequelize)
+- [X] Add Third-party login integration (google, github, ...)
 - [ ] Add connection to mongo
 - [ ] Add connection to redis
