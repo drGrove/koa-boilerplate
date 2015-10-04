@@ -57,6 +57,12 @@ module.exports = function(app){
    *            $ref: '#/definitions/User'
    */
   function *all() {
+    var attributes = null
+
+    if(this.auth) {
+      console.log('Auth:', this.auth)
+    }
+
     try {
       var users = JSON.parse(
           JSON.stringify(
