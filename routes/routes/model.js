@@ -53,18 +53,9 @@ module.exports = function(app) {
   ( 'Route'
   , schema
   , { paranoid: true
-    , classMethods:
-      { associate: function(models) {
-          return Route
-            .belongsToMany
-            ( models.Role
-            , { through: 'RouteRoles'
-              }
-            )
-        }
-      }
     }
   )
+
 
   Route.sync().then(function(){
     console.log('Route table synced')
