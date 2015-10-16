@@ -1,13 +1,16 @@
 var gulp = require('gulp')
-var mocha = require('gulp-mocha-co')
+var mocha = require('gulp-mocha')
 
 gulp.task('test', ['lint'], function() {
   gulp
     .src
-    ( [ './tests/**/**.spec.js'
+    ( [ './test/**/**.spec.js'
       ]
     )
     .pipe(mocha({
-      reporter: 'list'
+      reporter: 'list',
+      ignoreLeaks: true
+    }).on('error', function(){
+      // do nothing
     }))
 })
