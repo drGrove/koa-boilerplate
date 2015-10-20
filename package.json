@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.2.1",
+    "gulp-mocha": "^2.1.3",
     "jsonwebtoken": "^5.0.5",
     "koa": "^0.21.0",
     "koa-bodyparser": "^2.0.0",
@@ -92,8 +93,9 @@
     "postinstall": "bower install -y --config.cwd=public/swagger",
     "start-debug": "DEBUG=koa* ./node_modules/nodemon/bin/nodemon.js --debug index.js",
     "start-debug-brk": "DEBUG=koa* APP_HOST=0.0.0.0 APP_PORT=8886 ./node_modules/nodemon/bin/nodemon.js --debug-brk index.js",
-    "unit": "APP_PORT=8887 TESTING=true PROJECT_ROOT=$PWD mocha tests/unit/*",
-    "test": "APP_PORT=88889 TESTING=true PROJECT_ROOT=$PWD gulp test",
+    "validate": "gulp lint",
+    "unit": "APP_PORT=8887 TESTING=true PROJECT_ROOT=$PWD gulp unit",
+    "test": "APP_PORT=88889 TESTING=true PROJECT_ROOT=$PWD gulp smokeTest",
     "sequelize": "./node_modules/.bin/sequelize"
   }
 }
