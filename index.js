@@ -7,6 +7,7 @@ var morgan = require('koa-morgan')
 var responseTime = require('koa-response-time')
 var error = require('koa-error')
 var cors = require('koa-cors')
+var logger = require('./lib/logger')
 var config = require('./lib/config')
 var genErr = require('./lib/error')
 var sequelize = require('./lib/db').sequelize
@@ -20,7 +21,7 @@ app.rootDir = __dirname
 app.use(responseTime())
 
 // Logger
-app.use(morgan.middleware('combined'))
+app.use(morgan.middleware('combined', {stream: logger.stream}))
 
 // CORS
 app.use(cors())
@@ -86,10 +87,10 @@ app.use(require('koa-sequelize-transaction')({
 r.use(config.app.namespace, routes(app).routes())
 app.use(r.routes())
 
-if (process.env.TESTING) {
-  module.exports = app
-} else {
+if (!module.parent) {
   app.listen(config.app.port, config.app.host, function() {
-    console.log(`Listeing on http://${config.app.host}:${config.app.port}`)
+    logger.info(`Listeing on http://${config.app.host}:${config.app.port}`)
   })
 }
+
+module.exports = app

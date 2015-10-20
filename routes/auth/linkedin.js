@@ -8,6 +8,7 @@ module.exports = function(app) {
   var utilities = require(app.rootDir + '/lib/utilities')
   var Token = require(app.rootDir + '/lib/models/tokens')
   var genErr = require(app.rootDir + '/lib/error')
+  var logger = require(app.rootDir + '/lib/logger')
   var expect = require('expect')
 
   /**

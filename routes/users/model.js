@@ -3,6 +3,7 @@ module.exports = function(app) {
   var bcrypt = require('bcryptjs')
   var db = require(app.rootDir + '/lib/db').sequelize
   var Sequelize = require(app.rootDir + '/lib/db').Sequelize
+  var logger = require(app.rootDir + '/lib/logger')
 
   /**
    * @swagger
@@ -229,7 +230,7 @@ module.exports = function(app) {
   User.beforeUpdate(hashPassword)
 
   User.sync().then(function(){
-    console.log('User table synced')
+    logger.log('User table synced')
   })
 
   return User

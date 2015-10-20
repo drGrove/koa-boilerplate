@@ -7,6 +7,7 @@ module.exports = function(app) {
   var config = require(app.rootDir + '/lib/config')
   var Token = require(app.rootDir + '/lib/models/tokens')
   var genErr = require(app.rootDir + '/lib/error')
+  var logger = require(app.rootDir + '/lib/logger')
 
   /**
    * @swagger
@@ -93,7 +94,7 @@ module.exports = function(app) {
       user.displayName = user.displayName || profile.name;
 
       try {
-        console.log('save user', user)
+        logger.log('save user', user)
         yield user.save()
         return this.body =
         { token: token

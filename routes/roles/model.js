@@ -4,6 +4,7 @@ module.exports = function(app) {
   var Sequelize = require(app.rootDir + '/lib/db').Sequelize
   var Route = require(__dirname + '/../routes/model')(app)
   var User = require(__dirname + '/../users/model')(app)
+  var logger = require(app.rootDir + '/lib/logger')
 
   /**
    * @swagger
@@ -77,7 +78,7 @@ module.exports = function(app) {
     )
 
   Role.sync().then(function(){
-    console.log('Role table synced')
+    logger.log('Role table synced')
 
   })
 

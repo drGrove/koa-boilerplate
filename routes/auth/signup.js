@@ -6,6 +6,7 @@ module.exports = function(app) {
   var utilities = require(app.rootDir + '/lib/utilities')(app)
   var Token = require(app.rootDir + '/lib/models/tokens')
   var UserRole = require(app.rootDir + '/lib/models/userRoles')
+  var logger = require(app.rootDir + '/lib/logger')
 
   User
     .belongsToMany
@@ -80,7 +81,6 @@ module.exports = function(app) {
       })
 
       var role = yield Role.findById(3)
-      console.log('role: ', role)
       yield UserRole.create({userId: user.id, roleId: role.id})
 
       user = JSON.parse(JSON.stringify(user))
@@ -100,7 +100,7 @@ module.exports = function(app) {
       , type: 'bearer'
       }
     } catch (e) {
-      console.error('Error: ', e)
+      logger.error('Error: ', e)
       this.status = 500
       return this.body =
       { error: true

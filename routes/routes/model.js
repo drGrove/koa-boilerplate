@@ -2,6 +2,7 @@
 module.exports = function(app) {
   var db = require(app.rootDir + '/lib/db').sequelize
   var Sequelize = require(app.rootDir + '/lib/db').Sequelize
+  var logger = require(app.rootDir + '/lib/logger')
 
   /**
    * @swagger
@@ -58,7 +59,7 @@ module.exports = function(app) {
 
 
   Route.sync().then(function(){
-    console.log('Route table synced')
+    logger.log('Route table synced')
   })
 
   return Route

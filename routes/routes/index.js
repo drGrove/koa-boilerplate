@@ -4,6 +4,8 @@ module.exports = function(app) {
   var genError = require(app.rootDir + '/lib/error')
   var ensureAuth = require(app.rootDir + '/lib/ensureAuth')
   var Role = require(__dirname + '/../roles/model')(app)
+  var logger = require(app.rootDir + '/lib/logger')
+
   var routeConfig =
   { "POST":
     { "/": create
@@ -56,7 +58,7 @@ module.exports = function(app) {
       try {
         var route = yield Route.create(routeBody)
       } catch (e) {
-        console.error('Error: ', e)
+        logger.error('Error: ', e)
         var route = yield Route.findOne({
           where: routeBody,
           include: [Role]
@@ -67,10 +69,10 @@ module.exports = function(app) {
       this.status = 201
       return this.body = route
     } catch (e) {
-      console.error('Error: ', e)
+      logger.error('Error: ', e)
       switch(e.name) {
         case 'SequelizeUniqueConstraintError': {
-          console.error('Error: ', e)
+          logger.error('Error: ', e)
           this.status = 400
           return this.body =
           { error: true

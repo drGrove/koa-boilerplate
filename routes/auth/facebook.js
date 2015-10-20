@@ -8,6 +8,7 @@ module.exports = function(app) {
   var utilities = require(app.rootDir + '/lib/utilities')
   var Token = require(app.rootDir + '/lib/models/tokens')
   var genErr = require(app.rootDir + '/lib/error')
+  var logger = require(app.rootDir + '/lib/logger')
 
   /**
    * @swagger
@@ -43,7 +44,7 @@ module.exports = function(app) {
       )
 
     if(accessTokenResponse.statusCode != 200) {
-      console.error('Error connecting to facebook - access token')
+      logger.error('Error connecting to facebook - access token')
       this.status = 500
       return this.body =
         { error: true
@@ -67,7 +68,7 @@ module.exports = function(app) {
       )
 
     if(profileResponse.statusCode != 200) {
-      console.error('Error connecting to facebook - profile')
+      logger.error('Error connecting to facebook - profile')
       this.status = 500
       return this.body =
         { error: true

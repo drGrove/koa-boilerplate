@@ -2,6 +2,7 @@
 module.exports = function(app){
   var User = require(__dirname + '/model')(app)
   var ensureAuth = require(app.rootDir + '/lib/ensureAuth')
+  var logger = require(app.rootDir + '/lib/logger')
 
   var routeConfig =
   { "GET":
@@ -60,7 +61,7 @@ module.exports = function(app){
     var attributes = null
 
     if(this.auth) {
-      console.log('Auth:', this.auth)
+      logger.log('Auth:', this.auth)
     }
 
     try {
@@ -75,7 +76,7 @@ module.exports = function(app){
       this.status = 200
       return this.body = users
     } catch (e) {
-      console.error('Error: ', e.stack || e)
+      logger.error('Error: ', e.stack || e)
       this.status = 500
       return this.body =
       { error: true
@@ -113,7 +114,7 @@ module.exports = function(app){
     body.level = 1;
     try {
       var res = yield User.create(body);
-      console.log('Res: ', res)
+      logger.log('Res: ', res)
       this.status = 201
       delete res.password
       return this.body = res;
@@ -125,7 +126,7 @@ module.exports = function(app){
         }
       /*
       } else {
-        console.error('Error: ', e)
+        logger.error('Error: ', e)
         this.status = 400;
         return this.body =
         { error: true
@@ -234,7 +235,7 @@ module.exports = function(app){
       delete user.password
       return this.body = user
     } catch (e) {
-      console.error('Error: ', e.stack)
+      logger.error('Error: ', e.stack)
       this.status = 500
       this.body =
       { error: true
