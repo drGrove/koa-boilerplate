@@ -222,7 +222,7 @@ module.exports = function(app) {
           return this.dataValues
         }
       }
-    , paranoid: true
+    , paranoid: process.env.TESTING ? false : true
     }
   )
 

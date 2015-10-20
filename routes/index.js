@@ -58,6 +58,7 @@ var routes = function(app) {
     , 'json'
     , 'sql'
     , 'log'
+    , 'env'
     ]
 
     var files = fs.readdirSync(dir)

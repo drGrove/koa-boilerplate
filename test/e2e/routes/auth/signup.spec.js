@@ -4,7 +4,6 @@ var app = require(process.env.PROJECT_ROOT + '/index')
 var co = require('co')
 var server = app.listen()
 var request = require('co-supertest').agent(server)
-
 var userBody =
 { email: process.env.USER_EMAIL
 , password: process.env.USER_PASSWORD

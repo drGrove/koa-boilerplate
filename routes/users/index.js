@@ -267,10 +267,29 @@ module.exports = function(app){
   function *remove() {
     try {
       var user = yield User.findById(this.params.id)
+      logger.log('User: ', user)
+
+
+      if (!user) {
+        console.log('User not found')
+        this.status = 404
+        return this.body
+      }
+
       user.isActive = false
       yield user.save()
-      yield user.destroy()
-      return this.status = 204
+
+      yield User
+        .destroy
+        ( { where:
+            { id: this.params.id
+            }
+          }
+        )
+
+      this.status = 204
+      this.body = ""
+      return this.body
     } catch (e) {
       this.status = 500
       this.body =
