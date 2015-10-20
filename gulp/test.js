@@ -9,5 +9,7 @@ gulp.task('test', ['lint'], function() {
     )
     .pipe(mocha({
       reporter: 'list'
+    }).on('error', function() {
+      // do nothing
     }))
 })
