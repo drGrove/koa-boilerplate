@@ -61,8 +61,6 @@ app.use(function*(next) {
   }
 })
 
-
-
 // Swagger
 app.use(swagger.init({
   apiVersion: '1.0',

@@ -59,6 +59,10 @@ var routes = function(app) {
     , 'sql'
     , 'log'
     , 'env'
+    , 'production'
+    , 'development'
+    , 'testing'
+    , 'local'
     ]
 
     var files = fs.readdirSync(dir)
@@ -108,6 +112,7 @@ var routes = function(app) {
       , app.rootDir + '/gulpfile.js'
       , app.rootDir + '/migrations'
       , app.rootDir + '/tests'
+      , app.rootDir + '/LICENSE'
       ]
     );
 
