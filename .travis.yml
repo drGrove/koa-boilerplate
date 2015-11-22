@@ -6,9 +6,7 @@ before_install:
   - npm --version
   - npm install -g bower
   - npm install -g gulp
-  - npm install -g gulp-cli
   - npm install -g mocha
-  - npm install -g wrench
 addons:
   mariadb: "10.1"
 before_script:
