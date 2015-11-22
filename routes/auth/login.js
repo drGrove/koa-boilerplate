@@ -3,8 +3,8 @@
 module.exports = function(app) {
   var request = require('koa-request')
   var utilities = require(app.rootDir + '/lib/utilities')(app)
-  var Token = require(app.rootDir + '/lib/models/tokens')
-  var User = require(__dirname + '/../users/model')(app)
+  var User = require(app.rootDir + '/models').User
+  var Token = require(app.rootDir + '/models').Token
 
   /**
    * @swagger

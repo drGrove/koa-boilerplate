@@ -2,7 +2,7 @@
 
 module.exports = function(app) {
   var genErr = require(app.rootDir + '/lib/error')
-  var Token = require(app.rootDir + '/lib/models/tokens')
+  var Token = require(app.rootDir + '/models').Token
 
   /**
    * @swagger

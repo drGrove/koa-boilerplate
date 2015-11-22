@@ -45,6 +45,7 @@
     "gulp-jscs-stylish": "^1.2.1",
     "gulp-mocha-co": "^0.4.1-co.3",
     "mocha": "^2.3.0",
+    "mocha-steps": "0.0.1",
     "node-env-file": "^0.1.7",
     "nodemon": "^1.4.1",
     "sequelize-cli": "^1.9.1",
@@ -86,14 +87,18 @@
     "globals": {
       "promise": true,
       "expect": true,
-      "before": true
+      "before": true,
+      "app": true,
+      "request": true,
+      "co": true,
+      "server": true
     }
   },
   "scripts": {
-    "start": "PROD=true APP_HOST=0.0.0.0 APP_PORT=8886 node index.js",
+    "start": "NODE_ENV=true APP_HOST=0.0.0.0 APP_PORT=8886 node index.js",
     "postinstall": "bower install -y --config.cwd=public/swagger",
-    "start-debug": "DEBUG=koa* ./node_modules/nodemon/bin/nodemon.js --debug index.js",
-    "start-debug-brk": "DEBUG=koa* APP_HOST=0.0.0.0 APP_PORT=8886 ./node_modules/nodemon/bin/nodemon.js --debug-brk index.js",
+    "start-debug": "NODE_ENV=development DEBUG=koa* ./node_modules/nodemon/bin/nodemon.js --debug index.js",
+    "start-debug-brk": "NODE_ENV=development DEBUG=koa* APP_HOST=0.0.0.0 APP_PORT=8886 ./node_modules/nodemon/bin/nodemon.js --debug-brk index.js",
     "validate": "gulp lint",
     "unit": "APP_PORT=8887 TESTING=true PROJECT_ROOT=$PWD gulp unit",
     "test": "APP_PORT=88889 TESTING=true PROJECT_ROOT=$PWD gulp smokeTest",

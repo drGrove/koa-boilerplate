@@ -5,19 +5,18 @@ var co = require('co')
 var server = app.listen()
 var request = require('co-supertest').agent(server)
 
-describe('GET: UNAUTHORIZED: /users/:id -', function() {
-  after( function(done) {
-    server.close()
-    done()
-  })
+after(function(done) {
+  server.close()
+  done()
+})
 
+describe('GET: UNAUTHORIZED: /users', function() {
   var res;
 
-  before( function(done){
-    co( function *() {
+  before( function(done) {
+    co( function*() {
       res = yield request
         .get('/api/v1/users/me')
-        .end()
       done()
     })
   })

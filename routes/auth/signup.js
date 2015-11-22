@@ -1,31 +1,11 @@
 'use strict'
 
 module.exports = function(app) {
-  var User = require(__dirname + '/../users/model')(app)
-  var Role = require(__dirname + '/../roles/model')(app)
   var utilities = require(app.rootDir + '/lib/utilities')(app)
-  var Token = require(app.rootDir + '/lib/models/tokens')
-  var UserRole = require(app.rootDir + '/lib/models/userRoles')
   var logger = require(app.rootDir + '/lib/logger')
-
-  User
-    .belongsToMany
-    ( Role
-    , { through:
-        { model: UserRole
-        , foreignKey: 'userId'
-        }
-      }
-    )
-  Role
-    .belongsToMany
-    ( User
-    , { through:
-        { model: UserRole
-        , foreignKey: 'roleId'
-        }
-      }
-    )
+  var User = require(app.rootDir + '/models').User
+  var Role = require(app.rootDir + '/models').Role
+  var Token = require(app.rootDir + '/models').Token
 
   /**
    *  @swagger
@@ -67,10 +47,22 @@ module.exports = function(app) {
       }
     }
 
-    try {
-      var user = yield User.create(this.request.body)
+    if (!this.request.body) {
+      this.status = 400
+      this.body =
+        { error: true
+        , errNo: 400
+        , errCode: "INVALID_REQUEST"
+        , msg: "Fields missing"
+        }
+    }
 
-      var user = yield User.findOne({
+    let user;
+    let role;
+    try {
+      user = yield User.create(this.request.body)
+
+      user = yield User.findOne({
         where:
         { email: this.request.body.email
         },
@@ -80,8 +72,13 @@ module.exports = function(app) {
         ]
       })
 
-      var role = yield Role.findById(3)
-      yield UserRole.create({userId: user.id, roleId: role.id})
+      role = yield Role.findById(3)
+      let userRole = yield user
+        .addRole
+          ( role
+          , { userId: user.id
+            }
+          )
 
       user = JSON.parse(JSON.stringify(user))
       delete user.password;
@@ -100,7 +97,12 @@ module.exports = function(app) {
       , type: 'bearer'
       }
     } catch (e) {
-      logger.error('Error: ', e)
+      logger.error('Error - User Creation: ', e.errors || e.message || e)
+      var userID = user.id
+      var didDestroy = yield user.destroy({force: true})
+      if(!didDestroy) {
+        logger.error('ERROR - Destruction of User could not be completed. Excess data may exist for ', userId)
+      }
       this.status = 500
       return this.body =
       { error: true

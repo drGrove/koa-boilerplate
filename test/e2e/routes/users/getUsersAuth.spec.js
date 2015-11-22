@@ -5,20 +5,16 @@ var co = require('co')
 var server = app.listen()
 var request = require('co-supertest').agent(server)
 
-describe('GET: AUTHORIZED: /users -', function() {
-  after( function(done) {
-    server.close()
-    done()
-  })
-
+describe('GET: AUTHORIZED: /users', function() {
   var res;
 
-  before(function (done) {
+  before( function(done) {
     co( function*() {
       res = yield request
         .get('/api/v1/users')
         .set('Authorization', 'Bearer ' + process.env.USER_TOKEN)
         .end()
+
       done()
     })
   })
@@ -34,7 +30,7 @@ describe('GET: AUTHORIZED: /users -', function() {
   })
 
   it('Should have a length', function(done) {
-    expect(res.body.length).toBeGreaterThan(0)
+    expect(res.body.length || 0).toBeGreaterThan(0)
     done()
   })
 })

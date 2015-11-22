@@ -1,0 +1,7 @@
+var path = require('path')
+var NODE_ENV = process.env.NODE_ENV
+module.exports =
+{ 'config': path.resolve('migrations', NODE_ENV + '.json')
+, 'migrations-path': path.resolve('migrations', 'mysql')
+, 'seeders-path': path.resolve('migrations', 'seeders')
+}

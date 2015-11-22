@@ -1,0 +1,8 @@
+{ "database": "newapi_testing"
+, "username": "newapi"
+, "password": "newapi"
+, "host": "localhost"
+, "port": 3306
+, "dialect": "mysql"
+}
+

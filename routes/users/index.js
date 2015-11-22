@@ -1,8 +1,8 @@
 'use strict'
 module.exports = function(app){
-  var User = require(__dirname + '/model')(app)
   var ensureAuth = require(app.rootDir + '/lib/ensureAuth')
   var logger = require(app.rootDir + '/lib/logger')
+  var User = require(app.rootDir + '/models').User
 
   var routeConfig =
   { "GET":

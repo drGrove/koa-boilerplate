@@ -5,9 +5,9 @@ var co = require('co')
 var server = app.listen()
 var request = require('co-supertest').agent(server)
 var userBody =
-{ email: process.env.USER_EMAIL
-, password: process.env.USER_PASSWORD
-, firstname: 'Jonny'
+{ email: process.env.USER_EMAIL_SECONDARY
+, password: process.env.USER_PASSWORD_SECONDARY
+, firstname: 'Jonny 2'
 , lastname: 'Testerson'
 }
 
@@ -24,6 +24,7 @@ describe('SignUp:', function() {
       co( function*() {
         res = yield request
           .post('/api/v1/auth/signup')
+          .set('Content-Type', 'application/json')
           .send(userBody)
           .end()
         done()
@@ -37,5 +38,9 @@ describe('SignUp:', function() {
       done()
     })
 
+    it('Should set the web token as an environment variable', function(done) {
+      expect(process.env.USER_TOKEN).toBe(res.body.token)
+      done()
+    })
   })
 })

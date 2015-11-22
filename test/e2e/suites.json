@@ -1,0 +1,39 @@
+{ "SignUp":
+  { "env":
+    [ "common"
+    , "updateUser"
+    ]
+  , "steps":
+    [ { "name": "Sign Up"
+      , "spec": "auth/signUp"
+      }
+    ]
+  }
+, "UpdateUser":
+  { "env":
+    [ "common"
+    , "updateUser"
+    ]
+  , "steps":
+    [ { "name": "Sign Up"
+      , "spec": "auth/signUp"
+      }
+    , { "name": "Get User"
+      , "spec": "users/getUserAuth"
+      }
+    , { "name": "Update User"
+      , "spec": "users/updateUserAuth"
+      }
+    ]
+  }
+, "DeleteUser":
+  { "env":
+    [ "common"
+    ]
+  , "steps":
+    [ { "name": "Delete User"
+      , "spec": "users/deleteUserAuth"
+      }
+    ]
+  }
+}

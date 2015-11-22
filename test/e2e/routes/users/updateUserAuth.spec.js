@@ -5,14 +5,20 @@ var co = require('co')
 var server = app.listen()
 var request = require('co-supertest').agent(server)
 
-describe('GET: AUTHORIZED: /users/me', function() {
+describe('PUT: AUTHORIZED: /users/me', function() {
   var res;
+
+  var body =
+  { firstname: process.env.USER_FIRSTNAME
+  }
 
   before( function(done) {
     co( function*() {
+
       res = yield request
-        .get('/api/v1/users/me')
+        .put('/api/v1/users/me')
         .set('Authorization', 'Bearer ' + process.env.USER_TOKEN)
+        .send(body)
         .end()
 
       done()
@@ -29,9 +35,8 @@ describe('GET: AUTHORIZED: /users/me', function() {
     done()
   })
 
-  it('Should set the body to an environment variable', function(done) {
-    process.env.USER_BODY = JSON.stringify(res.body)
-    expect(process.env.USER_BODY).toBe(JSON.stringify(res.body))
+  it(`Should have the firstname: ${body.firstname}`, function(done) {
+    expect(res.body.firstname).toBe(body.firstname)
     done()
   })
 })

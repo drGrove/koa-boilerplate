@@ -1,9 +1,5 @@
 'use strict'
-module.exports = function(app) {
-  var db = require(app.rootDir + '/lib/db').sequelize
-  var Sequelize = require(app.rootDir + '/lib/db').Sequelize
-  var logger = require(app.rootDir + '/lib/logger')
-
+module.exports = function(sequelize, DataTypes) {
   /**
    * @swagger
    * definition:
@@ -26,17 +22,17 @@ module.exports = function(app) {
 
   var schema =
   { id:
-    { type: Sequelize.BIGINT
+    { type: DataTypes.BIGINT
     , autoIncrement: true
     , primaryKey: true
     }
   , url:
-    { type: Sequelize.STRING
+    { type: DataTypes.STRING
     , allowNull: false
     , unique: 'unq_UrlMethod'
     }
   , method:
-    { type: Sequelize.ENUM
+    { type: DataTypes.ENUM
       ( 'GET'
       , 'POST'
       , 'PUT'
@@ -49,18 +45,28 @@ module.exports = function(app) {
     }
   }
 
-  var Route = db
+  var Route = sequelize
   .define
   ( 'Route'
   , schema
   , { paranoid: true
+    , tableName: 'route'
+    , singular: 'route'
+    , plural: 'routes'
+    , classMethods:
+      { associate: function(models) {
+          Route
+            .belongsToMany
+            ( models.Role
+            , { through: 'routeRoles'
+              , foreignKey: 'routeId'
+              , targetKey: 'routeId'
+              }
+            )
+        }
+      }
     }
   )
-
-
-  Route.sync().then(function(){
-    logger.log('Route table synced')
-  })
 
   return Route
 }

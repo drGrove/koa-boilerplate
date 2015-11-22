@@ -1,10 +1,10 @@
 'use strict'
 module.exports = function(app) {
-  var Route = require(__dirname + '/model')(app)
   var genError = require(app.rootDir + '/lib/error')
   var ensureAuth = require(app.rootDir + '/lib/ensureAuth')
-  var Role = require(__dirname + '/../roles/model')(app)
   var logger = require(app.rootDir + '/lib/logger')
+  var Route = require(app.rootDir + '/models').Route
+  var Role = require(app.rootDir + '/models').Role
 
   var routeConfig =
   { "POST":

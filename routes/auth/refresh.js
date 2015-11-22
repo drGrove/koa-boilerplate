@@ -1,8 +1,8 @@
 'use strict'
 
 module.exports = function(app) {
-  var Token = require(app.rootDir + '/lib/models/tokens')
   var genErr = require(app.rootDir + '/lib/error')
+  var Token = require(app.rootDir + '/models').Token
 
   /**
    * @swagger

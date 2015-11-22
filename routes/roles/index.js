@@ -1,6 +1,6 @@
 'use strict'
 module.exports = function(app) {
-  var Roles = require(__dirname + '/model')(app)
+  var Roles = require(app.rootDir + '/models').Role
   var ensureAuth = require(app.rootDir + '/lib/ensureAuth')
   var logger = require(app.rootDir + '/lib/logger')
 

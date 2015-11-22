@@ -3,9 +3,7 @@
 module.exports = function(app) {
   var request = require('koa-request')
   var genErr = require(app.rootDir + '/lib/error')
-  var User = require(__dirname + '/../users/model')
-
-
+  var User = require(app.rootDir + '/models').User
 
   function *unlink() {
     var provider = this.request.body.provider;
