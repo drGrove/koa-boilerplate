@@ -6,7 +6,9 @@ gulp.task('unit', ['lint'], function() {
   projectRoot.pop()
   projectRoot = projectRoot.join('/')
   process.env.PROJECT_ROOT = projectRoot
-  process.env.TESTING = true
+  if (!process.env.NODE_ENV) {
+    process.env.NODE_ENV = 'testing'
+  }
   gulp
     .src
     ( [ './test/unit/**/**.spec.js'
@@ -23,4 +25,7 @@ gulp.task('unit', ['lint'], function() {
     }).on('error', function(){
       // do nothing
     }))
+    .once('end', function() {
+      process.exit()
+    })
 })

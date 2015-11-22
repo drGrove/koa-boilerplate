@@ -100,8 +100,8 @@
     "start-debug": "NODE_ENV=development DEBUG=koa* ./node_modules/nodemon/bin/nodemon.js --debug index.js",
     "start-debug-brk": "NODE_ENV=development DEBUG=koa* APP_HOST=0.0.0.0 APP_PORT=8886 ./node_modules/nodemon/bin/nodemon.js --debug-brk index.js",
     "validate": "gulp lint",
-    "unit": "APP_PORT=8887 TESTING=true PROJECT_ROOT=$PWD gulp unit",
-    "test": "APP_PORT=88889 TESTING=true PROJECT_ROOT=$PWD gulp smokeTest",
+    "unit": "APP_PORT=8887 NODE_ENV=testing PROJECT_ROOT=$PWD gulp unit",
+    "test": "APP_PORT=88889 NODE_ENV=testing PROJECT_ROOT=$PWD gulp smokeTest",
     "sequelize": "./node_modules/.bin/sequelize"
   }
 }

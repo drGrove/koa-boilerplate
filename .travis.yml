@@ -7,3 +7,10 @@ before_install:
   - npm install -g gulp
   - npm install -g gulp-cli
   - npm install -g mocha
+addons:
+  mariadb: '10.1'
+before_script:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS newapi_testing;' -uroot
+  - mysql -e 'CREATE USER `newapi`@`localhost` IDENTIFIED BY `newapi`;' -uroot
+  - mysql -e 'GRANT ALL PRIVILEGES ON newapi_testing.* to `newapi`@`localhost`;' -uroot
+  - mysql -e 'FLUSH PRIVILEGES;' -uroot
