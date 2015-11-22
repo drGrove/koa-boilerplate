@@ -3,10 +3,12 @@ node_js:
   - "4.1.2"
 before_install:
   - npm install -g npm
+  - npm --version
   - npm install -g bower
   - npm install -g gulp
   - npm install -g gulp-cli
   - npm install -g mocha
+  - npm install -g wrench
 addons:
   mariadb: "10.1"
 before_script:

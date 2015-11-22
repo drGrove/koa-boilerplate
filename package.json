@@ -50,8 +50,7 @@
     "nodemon": "^1.4.1",
     "sequelize-cli": "^1.9.1",
     "should": "^7.1.0",
-    "supertest": "^1.1.0",
-    "wrench": "^1.5.8"
+    "supertest": "^1.1.0"
   },
   "jscsConfig": {
     "preset": "node-style-guide",
