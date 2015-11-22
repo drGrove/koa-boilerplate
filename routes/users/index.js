@@ -271,7 +271,6 @@ module.exports = function(app){
 
 
       if (!user) {
-        console.log('User not found')
         this.status = 404
         return this.body
       }
