@@ -7,21 +7,21 @@ module.exports = function(app) {
   var Role = require(app.rootDir + '/models').Role
 
   var routeConfig =
-  { "POST":
-    { "/": create
+  { 'POST':
+    { '/': create
     }
-  , "GET":
-    { "/": all
-    , "/:id": byId
+  , 'GET':
+    { '/': all
+    , '/:id': byId
     }
-  , "PUT":
-    { "/:id":
+  , 'PUT':
+    { '/:id':
       [ ensureAuth
       , update
       ]
     }
-  , "DELETE":
-    { "/:id":
+  , 'DELETE':
+    { '/:id':
       [ ensureAuth
       , remove
       ]
@@ -29,6 +29,7 @@ module.exports = function(app) {
     }
   }
 
+  return routeConfig
   /**
    * @swagger
    * /routes:
@@ -55,11 +56,12 @@ module.exports = function(app) {
       }
       delete body.url
       delete body.method
+      var route;
       try {
-        var route = yield Route.create(routeBody)
+        route = yield Route.create(routeBody)
       } catch (e) {
         logger.error('Error: ', e)
-        var route = yield Route.findOne({
+        route = yield Route.findOne({
           where: routeBody,
           include: [Role]
         })
@@ -67,23 +69,25 @@ module.exports = function(app) {
       var role = yield Role.findById(body.role)
       yield role.addRoute(route)
       this.status = 201
-      return this.body = route
+      this.body = route
     } catch (e) {
       logger.error('Error: ', e)
       switch(e.name) {
         case 'SequelizeUniqueConstraintError': {
           logger.error('Error: ', e)
           this.status = 400
-          return this.body =
+          this.body =
           { error: true
           , msg: e.errors || e.message
           , errNo: 420
           , errCode: 'UniqueConstraint'
           }
+          return this.body
           break;
         }
       }
     }
+    return this.body
   }
 
   /**
@@ -128,7 +132,7 @@ module.exports = function(app) {
       this.status = 404;
       this.body =
       { error: true
-      , msg:  "Item not found"
+      , msg:  'Item not found'
       }
     }
   }
@@ -147,16 +151,17 @@ module.exports = function(app) {
         }
       }
       yield route.save()
-      return this.body = route
+      this.body = route
     } catch (e) {
       this.status = 400;
-      return this.body =
+      this.body =
       { error: true
       , msg: e.errors || e.message
       , errNo: 400
-      , errCode: "INVALID_PARAMETERS"
+      , errCode: 'INVALID_PARAMETERS'
       }
     }
+    return this.body
   }
 
   /**
@@ -168,15 +173,15 @@ module.exports = function(app) {
       var route = yield Route.findById(id)
       yield route.destroy()
       this.status = 204
-      return this.body = genError("NO_CONTENT")
+      this.body = genError('NO_CONTENT')
     } catch (e) {
       this.status = 500;
-      return this.body =
+      this.body =
       { error: true
       , msg: e.errors || e.message
       }
     }
+    return this.body
   }
 
-  return routeConfig
 }

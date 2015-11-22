@@ -31,7 +31,7 @@ var routes = function(app) {
       for (var path in paths[method]) {
         var args = paths[method][path]
         var uri = '/' + dir + path
-        if(Array.isArray(args)) {
+        if (Array.isArray(args)) {
           r[method.toLowerCase()](uri, compose(args))
         } else {
           r[method.toLowerCase()](uri, args)

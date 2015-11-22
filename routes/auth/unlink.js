@@ -1,8 +1,6 @@
 'use strict'
 
 module.exports = function(app) {
-  var request = require('koa-request')
-  var genErr = require(app.rootDir + '/lib/error')
   var User = require(app.rootDir + '/models').User
 
   function *unlink() {
@@ -22,22 +20,24 @@ module.exports = function(app) {
 
     if (providers.indexOf(provider) === -1) {
       this.status = 400
-      return this.body =
-      { error: true
-      , errNo: 400
-      , errCode: 'INVALID_REQUEST'
-      , msg: 'Invalid OAuth Provider supplied'
-      }
+      this.body =
+        { error: true
+        , errNo: 400
+        , errCode: 'INVALID_REQUEST'
+        , msg: 'Invalid OAuth Provider supplied'
+        }
+      return this.body
     }
     var user = yield User.findById(this.auth.id)
     if (!user) {
       this.status = 400
-      return this.body =
-      { error: true
-      , errCode: "NOT_FOUND"
-      , errNo: 404
-      , msg: "User Not Found"
-      }
+      this.body =
+        { error: true
+        , errCode: 'NOT_FOUND'
+        , errNo: 404
+        , msg: 'User Not Found'
+        }
+      return this.body
     }
 
     user[provider] = undefined;
@@ -47,15 +47,17 @@ module.exports = function(app) {
       user = JSON.parse(JSON.stringify(user))
       delete user.password
       this.status = 200
-      return this.body = user
+      this.body = user
+      return this.body
     } catch (e) {
       this.status = 500
-      return this.body =
+      this.body =
       { error: true
-      , errCode: "INTERNAL_SERVER_ERROR"
+      , errCode: 'INTERNAL_SERVER_ERROR'
       , errNo: 500
-      , msg: "Could not unlink account"
+      , msg: 'Could not unlink account'
       }
+      return this.body
     }
   }
 

@@ -13,8 +13,8 @@ function noop() {
 
 gulp.task('lint', function(done){
   return gulp.src([
-    './lib/**.js',
-    './routes/**.js',
+    './lib/**/**.js',
+    './routes/**/**.js',
     './index.js',
     './tests/**/**.spec.js'
   ])

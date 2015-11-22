@@ -39,12 +39,13 @@ module.exports = function(app) {
 
     if(existingUser) {
       this.status = 409
-      return this.body =
+      this.body =
       { error: true
       , errNo: 409
-      , errCode: "PROPERTY_CONFLICT"
-      , msg: "Email address already in use"
+      , errCode: 'PROPERTY_CONFLICT'
+      , msg: 'Email address already in use'
       }
+      return this.body
     }
 
     if (!this.request.body) {
@@ -52,9 +53,10 @@ module.exports = function(app) {
       this.body =
         { error: true
         , errNo: 400
-        , errCode: "INVALID_REQUEST"
-        , msg: "Fields missing"
+        , errCode: 'INVALID_REQUEST'
+        , msg: 'Fields missing'
         }
+      return this.body
     }
 
     let user;
@@ -79,6 +81,9 @@ module.exports = function(app) {
           , { userId: user.id
             }
           )
+      if (!userRole) {
+        throw new Error('Association not created')
+      }
 
       user = JSON.parse(JSON.stringify(user))
       delete user.password;
@@ -91,23 +96,25 @@ module.exports = function(app) {
         userId: user.id
       })
 
-      return this.body =
+      this.body =
       { token: token
       , refresh: refresh
       , type: 'bearer'
       }
+      return this.body
     } catch (e) {
       logger.error('Error - User Creation: ', e.errors || e.message || e)
-      var userID = user.id
+      var userId = user.id
       var didDestroy = yield user.destroy({force: true})
       if(!didDestroy) {
         logger.error('ERROR - Destruction of User could not be completed. Excess data may exist for ', userId)
       }
       this.status = 500
-      return this.body =
-      { error: true
-      , msg: e.errors || 'Could not create user'
-      }
+      this.body =
+        { error: true
+        , msg: e.errors || 'Could not create user'
+        }
+      return this.body
     }
   }
 

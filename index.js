@@ -35,7 +35,7 @@ app.use(error())
 // 404 Handler
 app.use(function*(next) {
   yield next;
-  var status = this.status || 404;
+  this.status = this.status || 404;
   if (this.status === 404) {
     this.status = 404
     this.body =

@@ -11,9 +11,13 @@ addons:
   mariadb: "10.1"
 before_script:
   - mysql -e "CREATE DATABASE IF NOT EXISTS newapi_testing;" -uroot
+  - mysql -e "CREATE DATABASE IF NOT EXISTS newapi_development;" -uroot
   - mysql -e "CREATE USER 'newapi'@'localhost' IDENTIFIED BY 'newapi';" -uroot
   - mysql -e "GRANT ALL PRIVILEGES ON newapi_testing.* to 'newapi'@'localhost';" -uroot
+  - mysql -e "GRANT ALL PRIVILEGES ON newapi_development.* to 'newapi'@'localhost';" -uroot
   - mysql -e "FLUSH PRIVILEGES;" -uroot
   - NODE_ENV=testing ./node_modules/.bin/sequelize db:migrate
+  - NODE_ENV=development ./node_modules/.bin/sequelize db:migrate
   - NODE_ENV=testing ./node_modules/.bin/sequelize db:seed
-script: gulp
+  - NODE_ENV=development ./node_modules/.bin/sequelize db:seed
+script: NODE_ENV=development gulp

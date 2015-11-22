@@ -1,8 +1,8 @@
 'use strict'
 
 module.exports = function(app) {
-  var genErr = require(app.rootDir + '/lib/error')
   var Token = require(app.rootDir + '/models').Token
+  var genErr = require(app.rootDir + '/lib/error')
 
   /**
    * @swagger
@@ -38,15 +38,20 @@ module.exports = function(app) {
         , token: this.request.headers.authorization.split(' ')[1]
         }
       })
-      if(token) {
-        yield token.destory()
+      if (token) {
+        let isDestroyed = yield token.destory()
+        if (!isDestroyed) {
+          throw new Error('Could not destroy')
+        }
       } else {
         throw new Error('TOKEN_EXPIRED')
       }
+
     } catch (e) {
       if(e.message === 'TOKEN_EXPIRED') {
         this.status = 403
-        return this.body = genErr('TOKEN_EXPIRED')
+        this.body = genErr('TOKEN_EXPIRED')
+        return this.body
       }
     }
   }

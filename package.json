@@ -87,6 +87,7 @@
     "asi": true,
     "laxcomma": true,
     "noyield": true,
+    "latedef": "nofunc",
     "globals": {
       "promise": true,
       "expect": true,

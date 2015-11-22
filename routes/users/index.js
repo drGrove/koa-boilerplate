@@ -5,30 +5,30 @@ module.exports = function(app){
   var User = require(app.rootDir + '/models').User
 
   var routeConfig =
-  { "GET":
-    { "":
+  { 'GET':
+    { '':
       [ ensureAuth
       , all
       ]
-    , "/:id":
+    , '/:id':
       [ ensureAuth
       , byId
       ]
     }
-  , "POST":
-    { "/":
+  , 'POST':
+    { '/':
       [ ensureAuth
       , create
       ]
     }
-  , "PUT":
-    { "/:id":
+  , 'PUT':
+    { '/:id':
       [ ensureAuth
       , update
       ]
     }
-  , "DELETE":
-    { "/:id":
+  , 'DELETE':
+    { '/:id':
       [ ensureAuth
       , remove
       ]
@@ -58,7 +58,7 @@ module.exports = function(app){
    *            $ref: '#/definitions/User'
    */
   function *all() {
-    var attributes = null
+    var attributes = {}
 
     if(this.auth) {
       logger.log('Auth:', this.auth)
@@ -67,22 +67,27 @@ module.exports = function(app){
     try {
       var users = JSON.parse(
           JSON.stringify(
-            yield User.findAll({})
+            yield User
+              .findAll
+                ( attributes
+                )
           )
         )
       for (var i = 0; i < users.length; i++) {
         delete users[i].password;
       }
       this.status = 200
-      return this.body = users
+      this.body = users
+      return this.body
     } catch (e) {
       logger.error('Error: ', e.stack || e)
       this.status = 500
-      return this.body =
-      { error: true
-      , msg: 'Error returning users'
-      , develeoperMsg: e.message
-      }
+      this.body =
+        { error: true
+        , msg: 'Error returning users'
+        , develeoperMsg: e.message
+        }
+      return this.body
     }
   }
   /**
@@ -113,28 +118,19 @@ module.exports = function(app){
     var body = this.request.body
     body.level = 1;
     try {
-      var res = yield User.create(body);
+      var res = yield User.create(body)
       logger.log('Res: ', res)
       this.status = 201
       delete res.password
-      return this.body = res;
+      this.body = res
+      return this.body
     } catch (e) {
-        this.status = 400;
-        return this.body =
+      this.status = 400
+      this.body =
         { error: true
         , msg: e.errors || 'Invalid Input'
         }
-      /*
-      } else {
-        logger.error('Error: ', e)
-        this.status = 400;
-        return this.body =
-        { error: true
-        , msg: 'Error creating user'
-        , develeoperMsg: e.message
-        }
-      }
-      */
+      return this.body
     }
     this.body = body
   }
@@ -176,7 +172,7 @@ module.exports = function(app){
         this.body = user
       } catch (e) {
         switch(e.name) {
-          case "TypeError":
+          case 'TypeError':
             this.status = 404;
             break;
           default:
@@ -217,13 +213,13 @@ module.exports = function(app){
     try {
       var user = yield User.findById(this.params.id)
       if(!user) {
-        var user = yield User.find({
+        user = yield User.find({
           where: {id: this.params.id},
           paranoid: false
         })
       }
       for(let key in body) {
-        if(body.hasOwnProperty(key) && key !== "id") {
+        if(body.hasOwnProperty(key) && key !== 'id') {
           user[key] = body[key]
         }
       }
@@ -233,14 +229,16 @@ module.exports = function(app){
       yield user.save()
       user = JSON.parse(JSON.stringify(user))
       delete user.password
-      return this.body = user
+      this.body = user
+      return this.body
     } catch (e) {
       logger.error('Error: ', e.stack)
       this.status = 500
       this.body =
-      { error: true
-      , msg: e.errors || e.message
-      }
+        { error: true
+        , msg: e.errors || e.message
+        }
+      return this.body
     }
   }
 
@@ -287,7 +285,7 @@ module.exports = function(app){
         )
 
       this.status = 204
-      this.body = ""
+      this.body = ''
       return this.body
     } catch (e) {
       this.status = 500
