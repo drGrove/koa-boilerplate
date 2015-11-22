@@ -14,6 +14,6 @@ before_script:
   - mysql -e "CREATE USER 'newapi'@'localhost' IDENTIFIED BY 'newapi';" -uroot
   - mysql -e "GRANT ALL PRIVILEGES ON newapi_testing.* to 'newapi'@'localhost';" -uroot
   - mysql -e "FLUSH PRIVILEGES;" -uroot
-  - NODE_ENV=testing./node_modules/.bin/sequelize db:migrate
-  - NODE_ENV=testing./node_modules/.bin/sequelize db:seed
+  - NODE_ENV=testing ./node_modules/.bin/sequelize db:migrate
+  - NODE_ENV=testing ./node_modules/.bin/sequelize db:seed
 script: gulp
