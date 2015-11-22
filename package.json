@@ -77,7 +77,7 @@
     "eqeqeq": true,
     "immed": true,
     "indent": 2,
-    "latedef": true,
+    "latedef": "nofunc",
     "newcap": true,
     "noarg": true,
     "quotmark": "single",
@@ -87,7 +87,6 @@
     "asi": true,
     "laxcomma": true,
     "noyield": true,
-    "latedef": "nofunc",
     "globals": {
       "promise": true,
       "expect": true,
