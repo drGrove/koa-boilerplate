@@ -44,13 +44,15 @@
     "gulp-jscs": "^2.0.0",
     "gulp-jscs-stylish": "^1.2.1",
     "gulp-mocha-co": "^0.4.1-co.3",
+    "gulp-run-sequence": "^0.3.2",
     "mocha": "^2.3.0",
     "mocha-steps": "0.0.1",
     "node-env-file": "^0.1.7",
     "nodemon": "^1.4.1",
     "sequelize-cli": "^1.9.1",
     "should": "^7.1.0",
-    "supertest": "^1.1.0"
+    "supertest": "^1.1.0",
+    "wrench": "^1.5.8"
   },
   "jscsConfig": {
     "preset": "node-style-guide",

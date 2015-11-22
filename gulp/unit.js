@@ -15,7 +15,6 @@ gulp.task('unit', ['lint'], function() {
       ]
     )
     .pipe(mocha({
-      reporter: 'list',
       ignoreLeaks: true,
       coverage: true,
       globals: {

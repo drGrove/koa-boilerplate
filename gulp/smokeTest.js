@@ -6,7 +6,7 @@ var fs = require('fs')
 var env = require('node-env-file')
 
 gulp.task('smokeTest', ['lint'], function() {
-  process.env.NODE_ENV = "TESTING"
+  process.env.NODE_ENV = process.env.NODE_ENV || 'testing'
   var projectRoot = __dirname.split('/')
   projectRoot.pop()
   projectRoot = projectRoot.join('/')
