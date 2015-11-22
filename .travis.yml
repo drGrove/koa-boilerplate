@@ -20,4 +20,4 @@ before_script:
   - NODE_ENV=development ./node_modules/.bin/sequelize db:migrate
   - NODE_ENV=testing ./node_modules/.bin/sequelize db:seed
   - NODE_ENV=development ./node_modules/.bin/sequelize db:seed
-script: NODE_ENV=development gulp
+script: DEBUG=* gulp
