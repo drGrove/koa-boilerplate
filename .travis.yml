@@ -20,4 +20,8 @@ before_script:
   - NODE_ENV=development ./node_modules/.bin/sequelize db:migrate
   - NODE_ENV=testing ./node_modules/.bin/sequelize db:seed
   - NODE_ENV=development ./node_modules/.bin/sequelize db:seed
-script: MOCHA_SUITES=all PROJECT_ROOT=$PWD NODE_ENV=testing mocha -r mocha-steps test/e2e/suiteRunner.js
+env:
+  - MOCHA_SUITES=all
+  - PROJECT_ROOT=$PWD
+  - NODE_ENV=testing
+script: mocha -r mocha-steps test/e2e/suiteRunner.js

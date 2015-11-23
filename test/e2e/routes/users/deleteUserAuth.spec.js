@@ -1,6 +1,7 @@
 'use strict'
 var expect = require('expect')
 var app = require(process.env.PROJECT_ROOT + '/index')
+var config = require(process.env.PROJECT_ROOT + '/config.json')
 var co = require('co')
 var server = app.listen()
 var request = require('co-supertest').agent(server)
@@ -16,7 +17,7 @@ describe('DELETE: AUTHORIZED: /users/:id', function() {
   before( function(done) {
     co( function*() {
       res = yield request
-        .delete('/api/v1/users/me')
+        .delete(config.app.namespace + '/users/me')
         .set('Authorization', 'Bearer ' + process.env.USER_TOKEN)
         .end()
       done()

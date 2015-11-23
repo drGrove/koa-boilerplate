@@ -4,6 +4,7 @@ var app = require(process.env.PROJECT_ROOT + '/index')
 var co = require('co')
 var server = app.listen()
 var request = require('co-supertest').agent(server)
+var config = require(process.env.PROJECT_ROOT + '/lib/config')
 var userBody =
 { email: process.env.USER_EMAIL
 , password: process.env.USER_PASSWORD
@@ -23,7 +24,7 @@ describe('SignUp:', function() {
     before( function(done) {
       co( function*() {
         res = yield request
-          .post('/api/v1/auth/signup')
+          .post(config.app.namespace + '/auth/signup')
           .set('Content-Type', 'application/json')
           .send(userBody)
           .end()

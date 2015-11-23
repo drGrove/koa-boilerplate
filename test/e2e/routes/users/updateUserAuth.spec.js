@@ -4,6 +4,7 @@ var app = require(process.env.PROJECT_ROOT + '/index')
 var co = require('co')
 var server = app.listen()
 var request = require('co-supertest').agent(server)
+var config = require(process.env.PROJECT_ROOT + '/lib/config')
 
 describe('PUT: AUTHORIZED: /users/me', function() {
   var res;
@@ -16,7 +17,7 @@ describe('PUT: AUTHORIZED: /users/me', function() {
     co( function*() {
 
       res = yield request
-        .put('/api/v1/users/me')
+        .put(config.app.namespace + '/users/me')
         .set('Authorization', 'Bearer ' + process.env.USER_TOKEN)
         .send(body)
         .end()

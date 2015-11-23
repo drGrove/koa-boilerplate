@@ -4,6 +4,7 @@ var app = require(process.env.PROJECT_ROOT + '/index')
 var co = require('co')
 var server = app.listen()
 var request = require('co-supertest').agent(server)
+var config = require(process.env.PROJECT_ROOT + '/lib/config')
 
 after(function(done) {
   server.close()
@@ -16,7 +17,7 @@ describe('GET: UNAUTHORIZED: /users', function() {
   before( function(done) {
     co( function*() {
       res = yield request
-        .get('/api/v1/users/me')
+        .get(config.app.namespace + '/users/me')
       done()
     })
   })
