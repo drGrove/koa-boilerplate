@@ -23,4 +23,4 @@ before_script:
   - mkdir logs
 env:
   - MOCHA_SUITES=all PROJECT_ROOT=$PWD NODE_ENV=testing
-script: mocha -r mocha-steps test/e2e/suiteRunner.js
+script: mocha -r mocha-steps test/e2e/suiteRunner.js && mocha test/unit/**/**.spec.js
