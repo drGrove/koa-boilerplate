@@ -1,7 +1,7 @@
 'use strict'
 var expect = require('expect')
 var app = require(process.env.PROJECT_ROOT + '/index')
-var config = require(process.env.PROJECT_ROOT + '/config.json')
+var config = require(process.env.PROJECT_ROOT + '/lib/config')
 var co = require('co')
 var server = app.listen()
 var request = require('co-supertest').agent(server)
