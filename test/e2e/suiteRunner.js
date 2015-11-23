@@ -25,7 +25,12 @@ describe('Suites:', function() {
       var envs = suite.env
       for(var i = 0; i < envs.length; i++) {
         var e = envs[i]
-        env(__dirname + `/env/${e}.env`)
+        var f = __dirname + `/env/${e}.env`
+        try {
+          env(f)
+        } catch (e) {
+          console.log('File not found: ', f)
+        }
       }
 
       var steps = suite.steps
