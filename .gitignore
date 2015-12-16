@@ -6,3 +6,4 @@ db/data
 *.env
 config.json
 logs/**
+migrations/*.json
