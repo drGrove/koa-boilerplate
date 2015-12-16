@@ -62,19 +62,21 @@ app.use(function*(next) {
 })
 
 // Swagger
-app.use(swagger.init({
-  apiVersion: '1.0',
-  swaggerVersion: '2.0',
-  swaggerURL: config.app.namespace + '/swagger',
-  swaggerJSON: config.app.namespace + '/docs',
-  swaggerUI: 'node_modules/swagger-ui/dist',
-  // swaggerUI: './public/swagger/',
-  basePath: 'http://' + config.app.domain + ':' + config.app.port,
-  info: {
-    title: 'API',
-    description: 'Blah'
-  }
-}))
+if (process.env.NODE_ENV !== "PRODUCTION") {
+  app.use(swagger.init({
+    apiVersion: '1.0',
+    swaggerVersion: '2.0',
+    swaggerURL: config.app.namespace + '/swagger',
+    swaggerJSON: config.app.namespace + '/docs',
+    swaggerUI: 'node_modules/swagger-ui/dist',
+    // swaggerUI: './public/swagger/',
+    basePath: 'http://' + config.app.domain + ':' + config.app.port,
+    info: {
+      title: 'API',
+      description: 'Blah'
+    }
+  }))
+}
 
 // Sequelize Transactions
 app.use(require('koa-sequelize-transaction')({

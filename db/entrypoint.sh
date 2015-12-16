@@ -4,6 +4,8 @@ set -e
 # TODO read this from the MySQL config?
 DATADIR='/var/lib/mysql'
 
+OTHER_DBS=("_testing" "_development")
+
 if [ "${1:0:1}" = '-' ]; then
     set -- mysqld "$@"
 fi
@@ -33,6 +35,11 @@ EOSQL
 
   if [ "$MYSQL_DATABASE" ]; then
       echo "CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE\` ;" >> "$tempSqlFile"
+
+      for sub in "${OTHER_DBS[@]}"
+      do
+        echo "CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE$sub\` ;" >> "$tempSqlFile"
+      done
   fi
 
   if [ "$MYSQL_USER" -a "$MYSQL_PASSWORD" ]; then
@@ -40,6 +47,11 @@ EOSQL
 
       if [ "$MYSQL_DATABASE" ]; then
           echo "GRANT ALL ON \`$MYSQL_DATABASE\`.* TO '$MYSQL_USER'@'%' ;" >> "$tempSqlFile"
+          for sub in "${OTHER_DBS[@]}"
+          do
+            echo "GRANT ALL ON \`$MYSQL_DATABASE$sub\`.* TO '$MYSQL_USER'@'%' ;" >> "$tempSqlFile"
+          done
+
       fi
   fi
 

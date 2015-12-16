@@ -115,26 +115,27 @@ var routes = function(app) {
       , app.rootDir + '/LICENSE'
       ]
     );
-
-  var swaggerOptions =
-  { swaggerDefinition:
-    { swagger: '2.0'
-    , info:
-      { title: 'API Explorer' // Title (required)
-      , version: '1.0.0' // Version (required)
-      , contact:
-        { name: ''
-        , url: ''
+  if (process.env.NODE_ENV !== "PRODUCTION") {
+    var swaggerOptions =
+    { swaggerDefinition:
+      { swagger: '2.0'
+      , info:
+        { title: 'API Explorer' // Title (required)
+        , version: '1.0.0' // Version (required)
+        , contact:
+          { name: ''
+          , url: ''
+          }
         }
+      , host: config.app.domain + ':' + config.app.port
+      , basePath: config.app.namespace
       }
-    , host: config.app.domain + ':' + config.app.port
-    , basePath: config.app.namespace
-    }
-  , apis: specs // Path to the API docs
-  };
+    , apis: specs // Path to the API docs
+    };
 
-  // Initialize swagger-jsdoc -> returns validated swagger spec in json format
-  var swaggerSpec = swaggerJSDoc(swaggerOptions);
+    // Initialize swagger-jsdoc -> returns validated swagger spec in json format
+    var swaggerSpec = swaggerJSDoc(swaggerOptions);
+  }
 
   r.get('/docs.json', function*() {
     this.body = swaggerSpec

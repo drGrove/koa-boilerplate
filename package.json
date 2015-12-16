@@ -98,13 +98,17 @@
     }
   },
   "scripts": {
-    "start": "NODE_ENV=true APP_HOST=0.0.0.0 APP_PORT=8886 node index.js",
+    "start": "NODE_ENV=PRODUCTION APP_HOST=0.0.0.0 APP_PORT=8886 node index.js",
     "postinstall": "bower install -y --config.cwd=public/swagger",
-    "start-debug": "NODE_ENV=development DEBUG=koa* ./node_modules/nodemon/bin/nodemon.js --debug index.js",
-    "start-debug-brk": "NODE_ENV=development DEBUG=koa* APP_HOST=0.0.0.0 APP_PORT=8886 ./node_modules/nodemon/bin/nodemon.js --debug-brk index.js",
+    "start-debug": "NODE_ENV=DEVELOPMENT DEBUG=koa* ./node_modules/nodemon/bin/nodemon.js --debug index.js",
+    "start-debug-brk": "NODE_ENV=DEVELOPMENT DEBUG=koa* APP_HOST=0.0.0.0 APP_PORT=8886 ./node_modules/nodemon/bin/nodemon.js --debug-brk index.js",
     "validate": "gulp lint",
-    "unit": "APP_PORT=8887 NODE_ENV=testing PROJECT_ROOT=$PWD gulp unit",
-    "test": "APP_PORT=88889 NODE_ENV=testing PROJECT_ROOT=$PWD gulp smokeTest",
+    "unit": "PROJECT_ROOT=$PWD gulp unit",
+    "test": "npm run seed-migrate && npm run unit && npm run smokeTest",
+    "seed": "npm run sequelize db:seed",
+    "migrate": "npm run sequelize db:migrate",
+    "seed-migrate": "npm run seed && npm run migrate",
+    "smokeTest": "PROJECT_ROOT=$PWD gulp smokeTest",
     "sequelize": "./node_modules/.bin/sequelize"
   }
 }

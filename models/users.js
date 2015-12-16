@@ -234,7 +234,7 @@ module.exports = function(sequelize, DataTypes) {
           return isValid
         }
       }
-    , paranoid: process.env.NODE_ENV === "testing" ? false : true
+    , paranoid: process.env.NODE_ENV === "TESTING" ? false : true
     , classMethods:
       { associate: function(models) {
           User

@@ -1,0 +1,21 @@
+build:
+  image: node:4.2.2-onbuild
+  commands:
+    - mkdir -p logs
+    - npm install -g gulp bower sequelize
+    - npm test
+  environment:
+    - NODE_ENV=TESTING
+    - DATABASE_DIALECT=mariadb
+    - DATABASE_USER=newapi
+    - DATABASE_PASS=newapi
+    - DATABASE_HOST=localhost
+    - DATABASE_NAME=newapi_testing
+compose:
+  mariadb:
+    image: mariadb:10.1.2
+    environment:
+      - MYSQL_USER=newapi
+      - MYSQL_PASSWORD=newapi
+      - MYSQL_DATABASE=newapi_testing
+      - MYSQL_ROOT_PASSWORD=toor
