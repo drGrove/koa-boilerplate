@@ -1,6 +1,7 @@
 #Koa Boilerplate
 
 [![Build Status](https://travis-ci.org/drGrove/koa-boilerplate.svg?branch=master)](https://travis-ci.org/drGrove/koa-boilerplate)
+[![Dependencies](https://david-dm.org/drGrove/koa-boilerplate.svg)](https://david-dm.org/drGrove/koa-boilerplate)
 
 ##Getting Started
 ```bash
