@@ -14,5 +14,4 @@ $ node run start-debug
 - [X] Add bcrypt and jwt
 - [X] Add connection to mysql,sqlite3,postgres (Sequelize)
 - [X] Add Third-party login integration (google, github, ...)
-- [ ] Add connection to mongo
-- [ ] Add connection to redis
+- [ ] Add connection to redis for caching
