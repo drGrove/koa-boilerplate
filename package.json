@@ -1,5 +1,5 @@
 {
-  "name": "package",
+  "name": "koa-boilerplate",
   "version": "0.5.0",
   "repository": "drGrove/koa-boilerplate",
   "engines": {
