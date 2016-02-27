@@ -42,8 +42,6 @@ module.exports = function(app) {
    *    summary: List Roles
    *    produces:
    *     - application/json
-   *    security:
-   *      - Authorization: []
    *    tags:
    *      - Roles
    *    security:
