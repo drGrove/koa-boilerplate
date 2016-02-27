@@ -15,6 +15,9 @@ var routes = require('./routes/index')
 var r = require('koa-router')()
 var app = koa()
 
+// Add support for GOD Mode with REPL
+require('./repl')
+
 app.rootDir = __dirname
 
 // X-Response-Time
