@@ -46,8 +46,20 @@ function setSmoke(files, mochaOpts) {
       )
 }
 
+gulp.task('pre-test', () => {
+  return gulp
+    .src
+      ( [ 'repl.js'
+        , 'index.js'
+        , 'routes/**/*.js'
+        ]
+      )
+    .pipe(istanbul())
+    .pipe(gulp.dest('coverage/'))
+})
 
-gulp.task('test', ['lint'], function(target) {
+
+gulp.task('test', ['lint', 'pre-test'], function(target) {
   process.env.NODE_ENV = process.env.NODE_ENV || 'testing'
   projectRoot = __dirname.split('/')
   projectRoot.pop()
@@ -85,4 +97,5 @@ gulp.task('test', ['lint'], function(target) {
     .once('end', function() {
       process.exit()
     })
+    .pipe(istanbul.writeReports())
 })

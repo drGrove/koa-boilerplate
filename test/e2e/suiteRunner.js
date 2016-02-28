@@ -2,13 +2,17 @@ describe('Suites:', function() {
   var path = require('path')
   var fs = require('fs')
   var env = require('node-env-file')
+  var steps = require('mocha-steps')
 
   var requestSuites = process.env.MOCHA_SUITES
 
   var allSuites = require(__dirname + '/suites.json')
   var suites = {}
 
-  if(requestSuites === 'all') {
+  if( requestSuites === 'all' ||
+      requestSuites === '' ||
+      requestSuites === undefined
+  ) {
     suites = allSuites
   } else {
     requestSuites = requestSuites.split(',')

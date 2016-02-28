@@ -24,10 +24,7 @@ gulp.task('smokeTest', ['lint'], function() {
       ]
     )
     .pipe(mocha({
-      ignoreLeaks: true,
-      require:
-      [ 'mocha-steps'
-      ]
+      ignoreLeaks: true
     }).on('error', function(){
       // do nothing
     }))

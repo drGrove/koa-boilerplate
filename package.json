@@ -101,7 +101,7 @@
   "scripts": {
     "start": "NODE_ENV=PRODUCTION APP_HOST=0.0.0.0 APP_PORT=8886 node index.js",
     "postinstall": "bower install -y --config.cwd=public/swagger",
-    "start-debug": "NODE_ENV=DEVELOPMENT DEBUG=koa* ./node_modules/nodemon/bin/nodemon.js --debug index.js",
+    "start-debug": "NODE_ENV=DEVELOPMENT DEBUG=koa* ./node_modules/nodemon/bin/nodemon.js --debug=6667 index.js",
     "start-debug-brk": "NODE_ENV=DEVELOPMENT DEBUG=koa* APP_HOST=0.0.0.0 APP_PORT=8886 ./node_modules/nodemon/bin/nodemon.js --debug-brk index.js",
     "validate": "gulp lint",
     "unit": "PROJECT_ROOT=$PWD gulp unit",

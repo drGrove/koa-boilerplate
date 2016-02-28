@@ -17,4 +17,4 @@ module.exports = net.createServer( (socket) => {
   })
 
   r.context.socket =  socket
-}).listen(1337)
+}).listen(process.env.REPL_PORT || 1337)
