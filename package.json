@@ -106,8 +106,8 @@
     "validate": "gulp lint",
     "unit": "PROJECT_ROOT=$PWD gulp unit",
     "test": "npm run seed-migrate && npm run unit && npm run smokeTest",
-    "seed": "npm run node_modules/.bin/sequelize db:seed",
-    "migrate": "npm run node_modules/.bin/sequelize db:migrate",
+    "seed": "node_modules/.bin/sequelize db:seed",
+    "migrate": "node_modules/.bin/sequelize db:migrate",
     "seed-migrate": "npm run seed && npm run migrate",
     "smokeTest": "PROJECT_ROOT=$PWD gulp smokeTest"
   }
