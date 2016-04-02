@@ -1,40 +1,42 @@
-'use strict'
+'use strict';
 module.exports = function(app) {
-  var Roles = require(app.rootDir + '/models').Role
-  var ensureAuth = require(app.rootDir + '/lib/ensureAuth')
-  var logger = require(app.rootDir + '/lib/logger')
+  var Roles = require(app.rootDir + '/models').Role;
+  var ensureAuth = require(app.rootDir + '/lib/ensureAuth');
+  var logger = require(app.rootDir + '/lib/logger');
 
   var routeConfig =
-  { 'GET':
-    { '/': all
-    , '/:id':
-      [ ensureAuth
-      , byId
-      ]
-    }
-  , 'POST':
-    { '/':
-      [ ensureAuth
-      , create
-      ]
-    }
-  , 'PUT':
-    { '/:id':
-      [ ensureAuth
-      , update
-      ]
-    }
-  , 'DELETE':
-    { '/:id':
-      [ ensureAuth
-      , remove
-      ]
-    }
-  }
+    { GET:
+      { '/': all
+      , '/:id':
+        [ ensureAuth
+        , byId
+        ]
+      }
+    , POST:
+      { '/':
+        [ ensureAuth
+        , create
+        ]
+      }
+    , PUT:
+      { '/:id':
+        [ ensureAuth
+        , update
+        ]
+      }
+    , DELETE:
+      { '/:id':
+        [ ensureAuth
+        , remove
+        ]
+      }
+    };
 
   return routeConfig;
 
   /**
+   * Get all roles
+   * @return {object} body
    * @swagger
    * /roles:
    *  get:
@@ -60,21 +62,24 @@ module.exports = function(app) {
           JSON.stringify(
             yield Roles.findAll({})
           )
-        )
-      this.status = 200
-      this.body = roles
+        );
+      this.status = 200;
+      this.body = roles;
     } catch (e) {
-      logger.error('Error: ', e.stack || e)
-      this.status = 500
+      logger.error('Error: ', e.stack || e);
+      this.status = 500;
       this.body =
-      { error: true
-      , msg: 'Error returning roles'
-      , develeoperMsg: e.message
-      }
+        { error: true
+        , msg: 'Error returning roles'
+        , develeoperMsg: e.message
+        };
     }
-    return this.body
+    return this.body;
   }
+
   /**
+   * Create a new role
+   * @return {object} body
    * @swagger
    * /roles:
    *   post:
@@ -99,26 +104,27 @@ module.exports = function(app) {
    *           $ref: '#/definitions/Role'
    */
   function *create() {
-    var body = this.request.body
+    var body = this.request.body;
     body.level = 1;
     try {
       var res = yield Roles.create(body);
-      logger.log('Res: ', res)
-      this.status = 201
-      delete res.password
+      logger.log('Res: ', res);
+      this.status = 201;
+      delete res.password;
       this.body = res;
     } catch (e) {
       this.status = 400;
       this.body =
         { error: true
         , msg: e.errors || 'Invalid Input'
-        }
+        };
     }
-    return this.body
+    return this.body;
   }
 
-
   /**
+   * Get a role by id
+   * @return {object} body
    * @swagger
    * /roles/{id}:
    *  get:
@@ -142,7 +148,7 @@ module.exports = function(app) {
    *          $ref: '#/definitions/Role'
    */
   function *byId() {
-    logger.log('ID: ', this.params.id)
+    logger.log('ID: ', this.params.id);
     try {
       var role = JSON.parse(
           JSON.stringify(
@@ -150,25 +156,27 @@ module.exports = function(app) {
               this.params.id
             )
           )
-        )
-      this.body = role
+        );
+      this.body = role;
     } catch (e) {
-      switch(e.name) {
+      switch (e.name) {
         case 'TypeError':
           this.status = 404;
           break;
         default:
-          this.status = 500
+          this.status = 500;
           this.body =
-          { error: true
-          , msg: e.message
-          }
+            { error: true
+            , msg: e.message
+            };
       }
     }
-    return this.body
+    return this.body;
   }
 
   /**
+   * Delete a role by id
+   * @return {object} body
    * @swagger
    * /roles/{id}:
    *   delete:
@@ -188,23 +196,24 @@ module.exports = function(app) {
    */
   function *remove() {
     try {
-      var role = yield Roles.findById(this.params.id)
-      role.isActive = false
-      yield role.save()
-      yield role.destroy()
-      this.status = 204
-      return this.status
+      var role = yield Roles.findById(this.params.id);
+      role.isActive = false;
+      yield role.save();
+      yield role.destroy();
+      this.status = 204;
     } catch (e) {
-      this.status = 500
+      this.status = 500;
       this.body =
-      { error: true
-      , msg: e.errors || e.message
-      }
-      return this.body
+        { error: true
+        , msg: e.errors || e.message
+        };
     }
+    return this.body;
   }
 
   /**
+   * Update a role by id
+   * @return {object} body
    * @swagger
    * /roles/{id}:
    *   put:
@@ -225,34 +234,33 @@ module.exports = function(app) {
    *           $ref: '#/definitions/Role'
    */
   function *update() {
-    var body = this.request.body
+    var body = this.request.body;
     try {
-      var role = yield Roles.findById(this.params.id)
-      if(!role) {
+      var role = yield Roles.findById(this.params.id);
+      if (!role) {
         role = yield Roles.find({
           where: {id: this.params.id},
           paranoid: false
-        })
+        });
       }
-      for(let key in body) {
-        if(body.hasOwnProperty(key) && key !== 'id') {
-          role[key] = body[key]
+      for (let key in body) {
+        if (body.hasOwnProperty(key) && key !== 'id') {
+          role[key] = body[key];
         }
       }
-      if(role.deletedAt && role.isActive) {
-        yield role.restore()
+      if (role.deletedAt && role.isActive) {
+        yield role.restore();
       }
-      yield role.save()
-      this.body = role
+      yield role.save();
+      this.body = role;
     } catch (e) {
-      logger.error('Error: ', e.stack)
-      this.status = 500
+      logger.error('Error: ', e.stack);
+      this.status = 500;
       this.body =
-      { error: true
-      , msg: e.errors || e.message
-      }
+        { error: true
+        , msg: e.errors || e.message
+        };
     }
-    return this.body
+    return this.body;
   }
-}
-
+};

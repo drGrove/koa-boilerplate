@@ -1,12 +1,13 @@
-'use strict'
+'use strict';
 
 module.exports = function(app) {
-  var request = require('koa-request')
-  var utilities = require(app.rootDir + '/lib/utilities')(app)
-  var User = require(app.rootDir + '/models').User
-  var Token = require(app.rootDir + '/models').Token
+  var utilities = require(app.rootDir + '/lib/utilities')(app);
+  var User = require(app.rootDir + '/models').User;
+  var Token = require(app.rootDir + '/models').Token;
 
   /**
+   * Log a user in
+   * @return {object} body
    * @swagger
    * /auth/login:
    *  post:
@@ -32,9 +33,8 @@ module.exports = function(app) {
    *        schema:
    *          $ref: '#/definitions/LoginResponse'
    */
-
   function *login() {
-    var body = this.request.body
+    var body = this.request.body;
     try {
       var user = yield User
         .findOne
@@ -42,42 +42,41 @@ module.exports = function(app) {
             { email: body.email
             }
           }
-        )
+        );
 
-      if(!user) {
-        throw new Error('User does not exist')
+      if (!user) {
+        throw new Error('User does not exist');
       }
 
-      var isMatch = user.validPassword(body.password)
-      if(isMatch) {
+      var isMatch = user.validPassword(body.password);
+      if (isMatch) {
         try {
-          var token = utilities.genToken(user)
-          var refresh = utilities.genRefresh()
+          var token = utilities.genToken(user);
+          var refresh = utilities.genRefresh();
           yield Token.create({
             token: token,
             refresh: refresh,
             userId: user.id
-          })
+          });
           this.body =
-          { token: token
-          , refresh: refresh
-          , type: 'bearer'
-          }
-          return this.body
+            { token: token
+            , refresh: refresh
+            , type: 'bearer'
+            };
         } catch (e) {
-          throw e
+          throw e;
         }
       } else {
-        throw new Error('Invalid email/password combination')
+        throw new Error('Invalid email/password combination');
       }
     } catch (e) {
-      this.status = 400
+      this.status = 400;
       this.body =
-      { error: true
-      , msg: e.message
-      }
-      return this.body
+        { error: true
+        , msg: e.message
+        };
     }
+    return this.body;
   }
 
   /**
@@ -111,5 +110,5 @@ module.exports = function(app) {
    *         type: integer
    */
 
-  return login
-}
+  return login;
+};

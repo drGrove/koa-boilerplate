@@ -29,7 +29,7 @@
     "path": "^0.11.14",
     "querystring": "^0.2.0",
     "sequelize": "^3.5.1",
-    "swagger-jsdoc": "drGrove/swagger-jsdoc#feature/securityDefinitions",
+    "swagger-jsdoc": "^1.2.1",
     "swagger-koa": "^1.0.8",
     "swagger-ui": "^2.1.2",
     "winston": "^1.1.1"
@@ -54,48 +54,26 @@
     "sequelize-cli": "^1.9.1",
     "should": "^7.1.0",
     "supertest": "^1.1.0",
+    "eslint": "^2.1.0",
+    "eslint-config-google": "^0.4.0",
+    "gulp-eslint": "^2.0.0",
     "wrench": "^1.5.8"
   },
-  "jscsConfig": {
-    "preset": "node-style-guide",
-    "requireCapitalizedComments": null,
-    "excludeFiles": [
-      "node_modules/**",
-      "coverage/**",
-      "jsdoc/**"
-    ],
-    "disallowTrailingComma": true,
-    "requireTrailingComma": false,
-    "disallowSpacesInsideParentheses": false,
-    "disallowSpacesInFunction": false
-  },
-  "jshintConfig": {
-    "node": true,
-    "esnext": true,
-    "bitwise": true,
-    "camelcase": true,
-    "curly": true,
-    "eqeqeq": true,
-    "immed": true,
-    "indent": 2,
-    "latedef": "nofunc",
-    "newcap": true,
-    "noarg": true,
-    "quotmark": "single",
-    "undef": true,
-    "unused": true,
-    "strict": true,
-    "asi": true,
-    "laxcomma": true,
-    "noyield": true,
-    "globals": {
-      "promise": true,
-      "expect": true,
-      "before": true,
-      "app": true,
-      "request": true,
-      "co": true,
-      "server": true
+  "eslintConfig": {
+    "env": {
+      "node": true,
+      "mocha": true
+    },
+    "extends": "google",
+    "rules": {
+      "object-curly-spacing": "off",
+      "comma-style": "off",
+      "camelcase": "off",
+      "generator-star-spacing": "off",
+      "array-bracket-spacing": "off",
+      "no-spaced-func": "off",
+      "space-in-parens": "off",
+      "no-unexpected-multiline": "off"
     }
   },
   "scripts": {

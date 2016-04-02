@@ -1,10 +1,12 @@
-'use strict'
+'use strict';
 
 module.exports = function(app) {
-  var Token = require(app.rootDir + '/models').Token
-  var genErr = require(app.rootDir + '/lib/error')
+  var Token = require(app.rootDir + '/models').Token;
+  var genErr = require(app.rootDir + '/lib/error');
 
   /**
+   * Refresh a users auth token
+   * @return {object} body
    * @swagger
    * /auth/refresh:
    *   get:
@@ -37,24 +39,23 @@ module.exports = function(app) {
         { userId: this.auth.id
         , token: this.request.headers.authorization.split(' ')[1]
         }
-      })
+      });
       if (token) {
-        let isDestroyed = yield token.destory()
+        let isDestroyed = yield token.destory();
         if (!isDestroyed) {
-          throw new Error('Could not destroy')
+          throw new Error('Could not destroy');
         }
       } else {
-        throw new Error('TOKEN_EXPIRED')
+        throw new Error('TOKEN_EXPIRED');
       }
-
     } catch (e) {
-      if(e.message === 'TOKEN_EXPIRED') {
-        this.status = 403
-        this.body = genErr('TOKEN_EXPIRED')
-        return this.body
+      if (e.message === 'TOKEN_EXPIRED') {
+        this.status = 403;
+        this.body = genErr('TOKEN_EXPIRED');
       }
     }
+    return this.body;
   }
 
-  return refresh
-}
+  return refresh;
+};

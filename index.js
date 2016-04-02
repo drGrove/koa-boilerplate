@@ -1,71 +1,71 @@
-'use strict'
+'use strict';
 
-var koa = require('koa')
-var swagger = require('swagger-koa')
-var bodyParser = require('koa-bodyparser')
-var morgan = require('koa-morgan')
-var responseTime = require('koa-response-time')
-var error = require('koa-error')
-var cors = require('koa-cors')
-var logger = require('./lib/logger')
-var config = require('./lib/config')
-var genErr = require('./lib/error')
-var sequelize = require('./lib/db').sequelize
-var routes = require('./routes/index')
-var r = require('koa-router')()
-var app = koa()
+var koa = require('koa');
+var swagger = require('swagger-koa');
+var bodyParser = require('koa-bodyparser');
+var morgan = require('koa-morgan');
+var responseTime = require('koa-response-time');
+var error = require('koa-error');
+var cors = require('koa-cors');
+var logger = require('./lib/logger');
+var config = require('./lib/config');
+var genErr = require('./lib/error');
+var sequelize = require('./lib/db').sequelize;
+var routes = require('./routes/index');
+var r = require('koa-router')();
+var app = koa();
 
 // Add support for GOD Mode with REPL
-require('./repl')
+require('./repl');
 
-app.rootDir = __dirname
+app.rootDir = __dirname;
 
 // X-Response-Time
-app.use(responseTime())
+app.use(responseTime());
 
 // Logger
-app.use(morgan.middleware('combined', {stream: logger.stream}))
+app.use(morgan.middleware('combined', {stream: logger.stream}));
 
 // CORS
-app.use(cors())
+app.use(cors());
 
 // Body Parser
-app.use(bodyParser())
+app.use(bodyParser());
 
 // Error Handler
-app.use(error())
+app.use(error());
 
 // 404 Handler
 app.use(function*(next) {
   yield next;
   this.status = this.status || 404;
   if (this.status === 404) {
-    this.status = 404
+    this.status = 404;
     this.body =
     { error: true
     , msg: 'Item not found'
-    }
+    };
 
-    return this.body
+    return this.body;
   }
-})
+});
 // 401 Handler
 app.use(function*(next) {
   try {
-    yield next
+    yield next;
   } catch (err) {
-    if (401 === err.status) {
-      this.status = 401
-      this.body = genErr('NO_AUTH')
-      return this.body
+    if (err.status === 401) {
+      this.status = 401;
+      this.body = genErr('NO_AUTH');
     } else {
-      yield next
+      yield next;
     }
   }
-})
+  return this.body;
+});
 
 // Swagger
-if (process.env.NODE_ENV !== "PRODUCTION") {
+if (process.env.NODE_ENV !== 'PRODUCTION') {
   app.use(swagger.init({
     apiVersion: '1.0',
     swaggerVersion: '2.0',
@@ -78,22 +78,22 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
       title: 'API',
       description: 'Blah'
     }
-  }))
+  }));
 }
 
 // Sequelize Transactions
 app.use(require('koa-sequelize-transaction')({
   sequelize: sequelize
-}))
+}));
 
 // Router
-r.use(config.app.namespace, routes(app).routes())
-app.use(r.routes())
+r.use(config.app.namespace, routes(app).routes());
+app.use(r.routes());
 
 if (!module.parent) {
   app.listen(config.app.port, config.app.host, function() {
-    logger.info(`Listeing on http://${config.app.host}:${config.app.port}`)
-  })
+    logger.info(`Listeing on http://${config.app.host}:${config.app.port}`);
+  });
 }
 
-module.exports = app
+module.exports = app;
