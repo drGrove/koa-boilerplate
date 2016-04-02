@@ -1,15 +1,22 @@
-'use strict'
+'use strict';
 
 module.exports = function(app) {
-  var request = require('koa-request')
-  var qs = require('querystring')
-  var config = require(app.rootDir + '/lib/config')
-  var genErr = require(app.rootDir + '/lib/error')
-  var logger = require(app.rootDir + '/lib/logger')
-  var User = require(app.rootDir + '/models').User
-  var Token = require(app.rootDir + '/models').Token
+  var request = require('koa-request');
+  var qs = require('querystring');
+  var path = require('path');
+  var jwt = require('jsonwebtoken');
+  var config = require(path.join(app.rootDir, '/lib/config'));
+  var genErr = require(path.join(app.rootDir, '/lib/error'));
+  var logger = require(path.join(app.rootDir, '/lib/logger'));
+  var User = require(path.join(app.rootDir, '/models')).User;
+  var Token = require(path.join(app.rootDir, '/models')).Token;
+  var utilities = require(path.join(app.rootDir, '/lib/utilities'));
+  var genToken = utilities.genToken;
+  var genRefresh = utilities.genRefresh;
 
   /**
+   * Auth with Github
+   * @return {object} body
    * @swagger
    * /auth/github:
    *  post:
@@ -31,11 +38,16 @@ module.exports = function(app) {
     var accessTokenUrl = 'https://github.com/login/oauth/access_token';
     var userApiUrl = 'https://api.github.com/user';
     var params =
-    { code: this.request.body.code
-    , client_id: this.request.body.clientId
-    , client_secret: config.oauth.github.clientSecret
-    , redirect_uri: this.request.body.redirectUri
-    };
+      { code: this.request.body.code
+      , client_id: this.request.body.clientId
+      , client_secret: config.oauth.github.clientSecret
+      , redirect_uri: this.request.body.redirectUri
+      };
+    var refresh;
+    var payload;
+    var token;
+    var user;
+    var existingUser;
 
     // Step 1. Exchange authorization code for access token.
     var accessTokenResponse = yield request
@@ -43,7 +55,7 @@ module.exports = function(app) {
         , method: 'GET'
         , qs: params
         }
-      )
+      );
     var accessToken = qs.parse(accessTokenResponse.body).access_token;
     var headers = { 'User-Agent': 'Satellizer' };
 
@@ -57,110 +69,121 @@ module.exports = function(app) {
         , headers: headers
         , json: true
         }
-      )
+      );
 
-    var profile = profileResponse.body
+    var profile = profileResponse.body;
     // Step 3a. Link user accounts.
     if (this.request.headers.authorization) {
-      var existingUser = yield User.findOne({
+      existingUser = yield User.findOne({
         where:
         { github: profile.id.toString()
         }
-      })
+      });
 
-      if(existingUser) {
-        this.status = 409
-        return this.body =
-        { error: true
-        , errCode: "AUTH_EXISTS"
-        , errNo: "499"
-        , msg: "There is already a GitHub account that belongs to you"
-        }
+      if (existingUser) {
+        this.status = 409;
+        this.body =
+          { error: true
+          , errCode: "AUTH_EXISTS"
+          , errNo: "499"
+          , msg: "There is already a GitHub account that belongs to you"
+          };
+        return this.body;
       }
-      var token = this.request.headers.authorization.split(' ')[1];
-      var payload = jwt.verify(token, config.token_secret);
-      var user = yield User.findById(payload.sub)
+      token = this.request.headers.authorization.split(' ')[1];
+      payload = jwt.verify(token, config.token_secret);
+      user = yield User.findById(payload.sub);
 
-      if(!user) {
-        this.status = 400
-        return this.body =
-        { error: true
-        , errCode: 'NOT_FOUND'
-        , errNo: 404
-        , msg: 'User not found'
-        }
+      if (!user) {
+        this.status = 400;
+        this.body =
+          { error: true
+          , errCode: 'NOT_FOUND'
+          , errNo: 404
+          , msg: 'User not found'
+          };
+        return this.body;
       }
       user.github = profile.id.toString();
       user.displayName = user.displayName || profile.name;
 
       try {
-        logger.log('save user', user)
-        yield user.save()
-        return this.body =
-        { token: token
-        , type: 'bearer'
-        }
+        logger.log('save user', user);
+        yield user.save();
+        this.body =
+          { token: token
+          , type: 'bearer'
+          };
       } catch (e) {
-        this.status = 500
-        return this.body =
-        { error: true
-        , errCode: 'INTERNAL_SERVER_ERROR'
-        , errNo: 500
-        , msg: 'could not save user'
-        }
+        this.status = 500;
+        this.body =
+          { error: true
+          , errCode: 'INTERNAL_SERVER_ERROR'
+          , errNo: 500
+          , msg: 'could not save user'
+          };
       }
     } else {
       // Step 3b. Create a new user account or return an existing one.
-      var existingUser = yield User.findOne({
+      existingUser = yield User.findOne({
         where:
         { github: profile.id
         }
-      })
+      });
 
       if (existingUser) {
-        var token = genToken(existingUser)
-        var refresh = genRefresh()
+        token = genToken(existingUser);
+        refresh = genRefresh();
 
         yield Token.create({
           token: token,
           refresh: refresh,
           userId: existingUser.id
-        })
+        });
 
-        return this.body =
-        { token: token
-        , refresh: refresh
-        , type: 'bearer'
-        }
+        this.body =
+          { token: token
+          , refresh: refresh
+          , type: 'bearer'
+          };
+        return this.body;
       }
-      var user = yield User.create({
-        github: profile.id,
-        displayName: profile.name,
-        email: profile.email
-      });
 
-      var user = yield User.findOne({
+      try {
+        yield User.create({
+          github: profile.id,
+          displayName: profile.name,
+          email: profile.email
+        });
+      } catch (e) {
+        this.status = 500;
+        this.body = genErr('INTERNAL_SERVER_ERROR');
+        return this.body;
+      }
+
+      user = yield User.findOne({
         where:
         { github: profile.id
         }
-      })
+      });
 
-      var token = genToken(existingUser)
-      var refresh = genRefresh()
+      token = genToken(existingUser);
+      refresh = genRefresh();
 
       yield Token.create({
         token: token,
         refresh: refresh,
         userId: existingUser.id
-      })
+      });
 
-      return this.body =
-      { token: token
-      , refresh: refresh
-      , type: 'bearer'
-      }
+      this.body =
+        { token: token
+        , refresh: refresh
+        , type: 'bearer'
+        };
     }
+    return this.body;
   }
 
-  return github
-}
+  return github;
+};

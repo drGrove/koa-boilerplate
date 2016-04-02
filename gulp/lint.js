@@ -1,26 +1,18 @@
-'use strict'
+'use strict';
 
-var gulp = require('gulp')
-var jscs = require('gulp-jscs')
-var jshint = require('gulp-jshint')
-var stylish = require('gulp-jscs-stylish')
-
-const pkg = require(__dirname + '/../package.json')
-
-function noop() {
-
-}
+var gulp = require('gulp');
+var eslint = require('gulp-eslint');
+var path = require('path');
+const pkg = require(path.join(__dirname, '/../package.json'));
 
 gulp.task('lint', function(done){
   return gulp.src([
+    './index.js',
     './lib/**/**.js',
     './routes/**/**.js',
-    './index.js',
     './tests/**/**.spec.js'
   ])
-  .pipe(jshint(pkg.jshintConfig))
-  .pipe(jscs(pkg.jscsConfig))
-  .on('error', noop)
-  .pipe(stylish.combineWithHintResults())
-  .pipe(jshint.reporter('jshint-stylish', {verbose: true}));
-})
+  .pipe(eslint())
+  .pipe(eslint.format())
+  .pipe(eslint.failAfterError());
+});
