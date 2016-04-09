@@ -1,20 +1,20 @@
 var path = require('path')
 var fs = require('fs')
-var env = (process.env.NODE_ENV + '') || 'development'
-env = env.toLowerCase()
+var env = String(process.env.NODE_ENV).toLowerCase() || 'development'
+
 try {
   var cfg = require('./migrations/' + env + '.json')
 } catch(e) {
+  console.error('No Migration Configuration file found. Attempting ENV Vars');
   var cfg = {}
   cfg.database = process.env.DATABASE_NAME || ''
   cfg.username = process.env.DATABASE_USER || ''
   cfg.password = process.env.DATABASE_PASS || ''
   cfg.host = process.env.DATABASE_HOST || 'localhost'
   cfg.dialect = process.env.DATABASE_DIALECT || 'mariadb'
-  fs.writeFileSync('./migrations/' + env + '.json', JSON.stringify(cfg))
 }
 module.exports =
-{ 'config': path.resolve('migrations', env + '.json')
+{ 'config': cfg
 , 'migrations-path': path.resolve('migrations', 'mysql')
 , 'seeders-path': path.resolve('migrations', 'seeders')
-}
+};
