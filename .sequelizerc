@@ -13,8 +13,12 @@ try {
   cfg.host = process.env.DATABASE_HOST || 'localhost'
   cfg.dialect = process.env.DATABASE_DIALECT || 'mariadb'
 }
-module.exports =
-{ 'config': cfg
+var dbConfig =
+{ 'config': __filename
 , 'migrations-path': path.resolve('migrations', 'mysql')
 , 'seeders-path': path.resolve('migrations', 'seeders')
 };
+
+dbConfig[env] = cfg
+
+module.exports = dbConfig;
