@@ -7,6 +7,7 @@ before_install:
   - npm install -g bower
   - npm install -g gulp
   - npm install -g mocha
+sudo: required
 addons:
   mariadb: "10.1"
 before_script:
