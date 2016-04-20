@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var bcrypt = require('bcryptjs')
+  var bcrypt = require('bcryptjs');
   /**
    *  @swagger
    *  definition:
@@ -169,7 +169,7 @@ module.exports = function(sequelize, DataTypes) {
     { type: DataTypes.STRING
     , allowNull: true
     }
-  }
+  };
 
   /**
    * Hash password with Bcrypt
@@ -180,21 +180,21 @@ module.exports = function(sequelize, DataTypes) {
    */
   var hashPassword = function(model, options, done) {
     if(!model.changed('password')) {
-      return done()
+      return done();
     }
     bcrypt.genSalt(10, function(err, salt) {
       if (err) {
-        return done(err)
+        return done(err);
       }
       bcrypt.hash(model.password, salt, function(err, hash) {
         if (err) {
-          return done(err)
+          return done(err);
         }
-        model.password = hash
-        done()
+        model.password = hash;
+        done();
       });
     });
-  }
+  };
 
   /**
    * Strip Password from returned model(s)
@@ -205,10 +205,10 @@ module.exports = function(sequelize, DataTypes) {
    */
   var stripPassword = function(models, options, done) {
     for(var i = 0; i < models.length; i++) {
-      delete models[i].password
+      delete models[i].password;
     }
-    done()
-  }
+    done();
+  };
 
   var User = sequelize
   .define
@@ -222,19 +222,21 @@ module.exports = function(sequelize, DataTypes) {
           bcrypt.genSalt(10, function(err, salt){
             bcrypt.hash(model.password, salt, null, function(err, hash){
               if(err) {
-                return done(err)
+                return done(err);
               }
-              model.password = hash
-              done()
+              model.password = hash;
+              done();
             })
           })
         }
       , validPassword: function(password, next) {
-          var isValid = bcrypt.compareSync(password, this.password)
-          return isValid
+          var isValid = bcrypt.compareSync(password, this.password);
+          return isValid;
         }
       }
-    , paranoid: process.env.NODE_ENV === "TESTING" ? false : true
+    , paranoid: String(process.env.NODE_ENV).toUpperCase() === "TESTING" ?
+        false :
+        true;
     , classMethods:
       { associate: function(models) {
           User
@@ -244,14 +246,14 @@ module.exports = function(sequelize, DataTypes) {
               , foreignKey: 'userId'
               , onDelete: 'cascade'
               }
-            )
+            );
         }
       }
     }
-  )
+  );
 
-  User.beforeCreate(hashPassword)
-  User.beforeUpdate(hashPassword)
+  User.beforeCreate(hashPassword);
+  User.beforeUpdate(hashPassword);
 
-  return User
-}
+  return User;
+};

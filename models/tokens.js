@@ -1,5 +1,6 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
+  const NODE_ENV = process.env.NODE_ENV;
   var schema =
   { id:
     { type: DataTypes.BIGINT
@@ -19,17 +20,18 @@ module.exports = function(sequelize, DataTypes) {
     { type: DataTypes.STRING
     , allowNull: false
     }
-  }
+  };
 
   var Token = sequelize
   .define
-  ( 'Token'
-  , schema
-  , { tableName: 'token'
-    , singular: 'token'
-    , plural: 'tokens'
-    }
-  )
+    ( 'Token'
+    , schema
+    , { tableName: 'token'
+      , singular: 'token'
+      , plural: 'tokens'
+      , paranoid: String(NODE_ENV).toUpperCase() === "TESTING" ? false : true
+      }
+    );
 
-  return Token
-}
+  return Token;
+};

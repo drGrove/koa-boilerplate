@@ -10,7 +10,7 @@ gulp.task('lint', function(done){
     './index.js',
     './lib/**/**.js',
     './routes/**/**.js',
-    './tests/**/**.spec.js'
+    './test/**/**.spec.js'
   ])
   .pipe(eslint())
   .pipe(eslint.format())

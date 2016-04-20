@@ -1,11 +1,10 @@
 'use strict';
-const NODE_ENV = process.env.NODE_ENV
-var configFile = NODE_ENV + ""
-configFile = configFile !== "" ? configFile.toLowerCase() : "development"
-var fs        = require('fs')
-var path      = require('path')
-var config    = require(__dirname + `/../migrations/${configFile}.json`)
-var db        = require(__dirname + '/../lib/db')
+const NODE_ENV = process.env.NODE_ENV;
+var configFile = String(NODE_ENV).toLowerCase() || 'development';
+var fs = require('fs');
+var path = require('path');
+var config = require(path.join(__dirname, `/../migrations/${configFile}.json`));
+var db = require(path.join(__dirname, '/../lib/db'));
 
 fs
   .readdirSync(__dirname)

@@ -20,15 +20,14 @@ gulp.task('smokeTest', ['lint'], function() {
 
   gulp
     .src
-    ( [ './test/e2e/suiteRunner.js'
-      ]
+    ( ['./test/e2e/suiteRunner.js']
     )
     .pipe(mocha({
       ignoreLeaks: true,
       require:
       [ 'mocha-steps'
       ]
-    }).on('error', function(){
+    }).on('error', function(error){
       // do nothing
     }))
     .once('end', function() {
