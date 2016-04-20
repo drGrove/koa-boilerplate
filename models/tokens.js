@@ -29,7 +29,7 @@ module.exports = function(sequelize, DataTypes) {
     , { tableName: 'token'
       , singular: 'token'
       , plural: 'tokens'
-      , paranoid: String(NODE_ENV).toUpperCase() === "TESTING" ? false : true
+      , paranoid: String(NODE_ENV).toUpperCase() !== "TESTING"
       }
     );
 

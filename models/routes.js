@@ -1,5 +1,6 @@
-'use strict'
-module.exports = function(sequelize, DataTypes) {
+'use strict';
+
+module.exports = function(sequelize, dataTypes) {
   /**
    * @swagger
    * definition:
@@ -22,17 +23,17 @@ module.exports = function(sequelize, DataTypes) {
 
   var schema =
     { id:
-      { type: DataTypes.BIGINT
+      { type: dataTypes.BIGINT
       , autoIncrement: true
       , primaryKey: true
       }
     , url:
-      { type: DataTypes.STRING
+      { type: dataTypes.STRING
       , allowNull: false
       , unique: 'unq_UrlMethod'
       }
     , method:
-      { type: DataTypes.ENUM
+      { type: dataTypes.ENUM
         ( 'GET'
         , 'POST'
         , 'PUT'

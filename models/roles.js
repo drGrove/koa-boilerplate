@@ -1,4 +1,5 @@
-'use strict'
+'use strict';
+
 module.exports = function(sequelize, DataTypes) {
   /**
    * @swagger
@@ -57,7 +58,7 @@ module.exports = function(sequelize, DataTypes) {
   .define
     ( 'Role'
     , schema
-    , { paranoid: process.env.NODE_ENV === "TESTING" ? false : true
+    , { paranoid: process.env.NODE_ENV !== "TESTING"
       , tableName: 'role'
       , singular: 'role'
       , plural: 'roles'

@@ -14,7 +14,7 @@ describe('Suites:', function() {
     requestSuites = requestSuites.split(',');
     for(var i = 0; i < requestSuites.length; i++) {
       var key = requestSuites[i];
-      suites[key] = allSuites[key]
+      suites[key] = allSuites[key];
     }
   }
 
@@ -37,8 +37,8 @@ describe('Suites:', function() {
       for(var i = 0; i < steps.length; i++) {
         var s = steps[i];
         step(s.name, function() {
-          console.log(`Spec: ${s.spec}`)
-          require(__dirname + `/routes/${s.spec}.spec`);
+          console.log(`Spec: ${s.spec}`);
+          require(path.join(__dirname, `/routes/${s.spec}.spec`));
         });
       }
     });

@@ -73,7 +73,9 @@
       "array-bracket-spacing": "off",
       "no-spaced-func": "off",
       "space-in-parens": "off",
-      "no-unexpected-multiline": "off"
+      "no-unexpected-multiline": "off",
+      "indent": "off",
+      "new-cap": "off"
     }
   },
   "scripts": {

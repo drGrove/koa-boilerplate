@@ -173,41 +173,27 @@ module.exports = function(sequelize, DataTypes) {
 
   /**
    * Hash password with Bcrypt
-   * @function
-   * @param {object} model
-   * @param {object} options
-   * @param {function} done
+   * @param {object} model map of models
+   * @param {object} options options
+   * @param {function} done function to call when done
    */
   var hashPassword = function(model, options, done) {
-    if(!model.changed('password')) {
-      return done();
-    }
-    bcrypt.genSalt(10, function(err, salt) {
-      if (err) {
-        return done(err);
-      }
-      bcrypt.hash(model.password, salt, function(err, hash) {
+    if (model.changed('password')) {
+      bcrypt.genSalt(10, function(err, salt) {
         if (err) {
-          return done(err);
+          done();
+        } else {
+          bcrypt.hash(model.password, salt, function(err, hash) {
+            if (!err) {
+              model.password = hash;
+            }
+            done();
+          });
         }
-        model.password = hash;
-        done();
       });
-    });
-  };
-
-  /**
-   * Strip Password from returned model(s)
-   * @function
-   * @param {object} models
-   * @param {object} options
-   * @param {function} done
-   */
-  var stripPassword = function(models, options, done) {
-    for(var i = 0; i < models.length; i++) {
-      delete models[i].password;
+    } else {
+      done();
     }
-    done();
   };
 
   var User = sequelize
@@ -219,24 +205,26 @@ module.exports = function(sequelize, DataTypes) {
     , plural: 'users'
     , instanceMethods:
       { generateHash: function(password, done) {
-          bcrypt.genSalt(10, function(err, salt){
-            bcrypt.hash(model.password, salt, null, function(err, hash){
-              if(err) {
-                return done(err);
-              }
-              model.password = hash;
+          var model = this;
+          bcrypt.genSalt(10, function(err, salt) {
+            if (err) {
               done();
-            })
-          })
+            } else {
+              bcrypt.hash(model.password, salt, null, function(err, hash) {
+                if (!err) {
+                  model.password = hash;
+                }
+                done();
+              });
+            }
+          });
         }
-      , validPassword: function(password, next) {
+      , validPassword: function(password) {
           var isValid = bcrypt.compareSync(password, this.password);
           return isValid;
         }
       }
-    , paranoid: String(process.env.NODE_ENV).toUpperCase() === "TESTING" ?
-        false :
-        true
+    , paranoid: String(process.env.NODE_ENV).toUpperCase() !== "TESTING"
     , classMethods:
       { associate: function(models) {
           User
