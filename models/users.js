@@ -236,7 +236,7 @@ module.exports = function(sequelize, DataTypes) {
       }
     , paranoid: String(process.env.NODE_ENV).toUpperCase() === "TESTING" ?
         false :
-        true;
+        true
     , classMethods:
       { associate: function(models) {
           User
