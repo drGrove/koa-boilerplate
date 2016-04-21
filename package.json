@@ -1,6 +1,6 @@
 {
   "name": "koa-boilerplate",
-  "version": "0.5.0",
+  "version": "0.7.0",
   "repository": "drGrove/koa-boilerplate",
   "engines": {
     "node": ">=4.0"
