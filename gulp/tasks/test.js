@@ -3,11 +3,12 @@ var mocha = require('gulp-mocha')
 var minimist = require('minimist')
 var path = require('path')
 var fs = require('fs')
-var env = require('node-env-file')
+var env = require('node-env-file');
+var config = require('../config');
 var projectRoot;
 
 function setUnit(files, mochaOpts) {
-  files.push('./test/unit/**/**.spec.js')
+  files.push(config.PATHS.UNIT_TESTS)
   var opts =
     { ignoreLeaks: true
     , coverage: true
@@ -29,7 +30,7 @@ function setSmoke(files, mochaOpts) {
   var options = minimist(process.argv.slice(2), {})
   process.env.MOCHA_SUITES = options.suites ? options.suites : 'all'
 
-  files.push('./test/e2e/suiteRunner.js')
+  files.push(config.PATHS.SUITE_RUNNER)
 
   var opts =
     { ignoreLeaks: true
